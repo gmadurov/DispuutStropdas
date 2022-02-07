@@ -1,0 +1,60 @@
+{% extends 'main.html'%} {% block content %}
+<!-- Main Section -->
+<main class="home">
+  <section class="hero-section text-center">
+    <div class="container container--narrow">
+      <div class="hero-section__box">
+        <h2>Leden<span>Leden</span></h2>
+      </div>
+
+      <div class="hero-section__search">
+        <form
+          id="searchForm"
+          class="form"
+          action="{% url 'lids' %}"
+          method="get"
+        >
+          <div class="form__field">
+            <label for="formInput#search">Zoek Leden</label>
+            <input
+              class="input input--text"
+              id="formInput#search"
+              type="text"
+              name="search_query"
+              value="{{search_query}}"
+              placeholder="Zoek"
+            />
+          </div>
+
+          <input class="btn btn--sub btn--lg" type="submit" value="Search" />
+        </form>
+      </div>
+    </div>
+  </section>
+  <section class="">
+    <div class="container">
+      <div class="grid grid--three">
+        {% for lid in lids %}
+        <div class="column card">
+          <div class="dev">
+            <a href="{% url 'user-lid' lid.id %}" class="card__body">
+              <div class="dev__lid">
+                <img
+                  class="avatar avatar--md"
+                  src="{{lid.imageURL }}"
+                  alt="image"
+                />
+                <div class="dev__meta">
+                  <h3>{{lid.name}}</h3>
+                  <h5>{{lid.short_intro|slice:"50"}}</h5>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock content %}

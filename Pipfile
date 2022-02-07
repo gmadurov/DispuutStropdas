@@ -25,6 +25,11 @@ Pillow = "==8.4.0"
 SQLAlchemy = "==1.4.27"
 
 [dev-packages]
+yapf = "*"
+black = "*"
 
 [requires]
 python_version = "3.8"
+
+[pipenv]
+allow_prereleases = true
