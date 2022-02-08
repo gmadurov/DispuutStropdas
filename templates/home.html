@@ -1,0 +1,54 @@
+<html>
+    {% load static %}
+
+  <head>
+    <title>Dum Spiro Spero!</title>
+    <meta
+      name="keywords"
+      content="STROPDAS, theta, Eindhoven, heren, heren van weleer"
+    />
+    <meta
+      name="description"
+      content="Het herendispuut STROPDAS der E.S.R. Theta"
+    />
+
+    <style>
+      #block {
+        background-color: #fff;
+        padding: 15px;
+        width: 300px;
+        border: 1px solid grey;
+        margin-top: 30px;
+      }
+    </style>
+  </head>
+
+  <body background="{% static 'images/blazoen_small.jpg'%}">
+    <br /><br />
+    <div align="center">
+      <img src="{% static 'images/blazoen.png'%}" border="0" usemap="#blazoen" />
+      <map name="blazoen">
+        <area
+          shape="circle"
+          coords="102,170,9"
+          href="{% url 'login'%}"
+          alt="Ga verder..."
+        />
+        <area
+          shape="rect"
+          coords="0,0,300,432"
+          href="{% url 'fakePage'%}"
+          alt="Ga verder..."
+        />
+      </map>
+
+      <br /><br />
+      <img src="{% static 'images/dumspiro.gif'%}" />
+
+      <div id="block">
+        Krabbedampad 16 <br />
+        5611GW Eindhoven
+      </div>
+    </div>
+  </body>
+</html>
