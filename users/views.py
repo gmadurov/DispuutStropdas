@@ -76,7 +76,10 @@ def editAccount(request):
 
     return render(request, 'users/lid-form.html', content)
 
-
+def home(request):
+    return render(request, 'home.html')
+def fakePage(request):
+    return render(request, 'main-page.html')
 
 # def showCV(request, pk):
 #     lid = Lid.objects.get(id=pk)

@@ -1,45 +1,76 @@
-{% extends 'main.html'%} {% block content%}
-
-<div class="auth">
-  <div class="card">
-    <div class="auth__header text-center">
-      <h3>Login</h3>
-      <p>Hoi, mooie pik</p>
+<html>
+  {% load static %}
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+    />
+    <title>Login - STROPDAS</title>
+  </head>
+  <body background="{% static 'images/blazoen_small.jpg'%}">
+    <div class="columns is-centered">
+      <div class="column is-2">
+        <br />
+        <div class="container" style="text-align: center">
+          <img
+            src="{% static 'images/dumspiro.gif'%}"
+            alt="DUM SPIRO SPERO"
+            style="width: 240px; height: 39px"
+          />
+        </div>
+        <br />
+        <div
+          class="container"
+          style="background-color:#FFF; padding; 20px; border: 1px solid grey;"
+        >
+          <div class="container">
+            <form class="form" action="" method="POST" style="">
+              {% csrf_token %}
+              <div class="columns is-gapless">
+                <div
+                  class="column is-4"
+                  style="text-align: center; padding: 15px"
+                >
+                  <div class="text" style="padding-top: 10px">Login</div>
+                  <div
+                    class="text"
+                    style="padding-top: 0px; padding-right: 0px"
+                  >
+                    Password
+                  </div>
+                </div>
+                <div class="column is-8">
+                  <div style="padding-top: 15px; padding-bottom: 0px">
+                    <input
+                      style="width: 75%"
+                      type="text"
+                      name="username"
+                      id="formInput#text"
+                      placeholder="STROPDAS"
+                    />
+                  </div>
+                  <div style="padding-top: 0px">
+                    <input
+                      {% comment %} class="input" {% endcomment %}
+                      style="width: 75%"
+                      type="password"
+                      name="password"
+                      id="formInput#passowrd"
+                      placeholder="••••••••"
+                    />
+                  </div>
+                  <input
+                    class="btn"
+                    style="width: 75%;padding-bottom; 20px;"
+                    type="submit"
+                    value="Log in"
+                  />
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <form action="" method="POST" class="form auth__form">
-      {% csrf_token %}
-      <!-- Input:Username-->
-      <div class="form__field">
-        <label for="formInput#text">Username: </label>
-        <input
-          class="input input--text"
-          id="formInput#text"
-          type="text"
-          name="username"
-          placeholder="Enter your username..."
-        />
-      </div>
-
-      <!-- Input:Password -->
-      <div class="form__field">
-        <label for="formInput#password">Password: </label>
-        <input
-          class="input input--password"
-          id="formInput#passowrd"
-          type="password"
-          name="password"
-          placeholder="••••••••"
-        />
-      </div>
-      <div class="auth__actions">
-        <input class="btn btn--sub btn--lg" type="submit" value="Log In" />
-        <a href="{% url 'reset_password' %}">Forget Password?</a>
-      </div>
-    </form>
-    <div class="auth__alternative">
-      <p>Don’t have an Account? ha Sukkel</p>
-    </div>
-  </div>
-</div>
-{% endblock content%}
+  </body>
+</html>
