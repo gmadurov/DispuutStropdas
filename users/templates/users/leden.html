@@ -1,4 +1,4 @@
-{% extends 'main.html'%} {% block content %}
+{% extends 'main.html'%} {% block content %} {% comment %}
 <!-- Main Section -->
 <main class="home">
   <section class="hero-section text-center">
@@ -11,7 +11,7 @@
         <form
           id="searchForm"
           class="form"
-          action="{% url 'lids' %}"
+          action="{% url 'leden' %}"
           method="get"
         >
           <div class="form__field">
@@ -34,7 +34,7 @@
   <section class="">
     <div class="container">
       <div class="grid grid--three">
-        {% for lid in lids %}
+        {% for lid in leden %}
         <div class="column card">
           <div class="dev">
             <a href="{% url 'user-lid' lid.id %}" class="card__body">
@@ -57,4 +57,4 @@
     </div>
   </section>
 </main>
-{% endblock content %}
+{% endcomment %} {% endblock content %}

@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(blank=True, max_length=500)),
                 ('phone', models.CharField(blank=True, max_length=500, null=True, unique=True)),
                 ('short_intro', models.CharField(blank=True, max_length=200, null=True)),
-                ('lid_image', models.ImageField(blank=True, default='images/lids/user-default.png', null=True, upload_to='images/lids/')),
+                ('lid_image', models.ImageField(blank=True, default='images/leden/user-default.png', null=True, upload_to='images/leden/')),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
                 ('user', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),

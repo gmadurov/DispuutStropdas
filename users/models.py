@@ -19,7 +19,7 @@ class Lid(models.Model):
     phone = models.CharField(max_length=500, null=True, blank=True, unique =True)
     short_intro = models.CharField(max_length=200, null=True, blank=True)
     lid_image = models.ImageField(
-        upload_to='images/lids/',null=True, blank=True, default='images/lids/user-default.png')
+        upload_to='images/leden/',null=True, blank=True, default='images/leden/user-default.png')
 
     created = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True,
@@ -32,7 +32,7 @@ class Lid(models.Model):
         try:
             url = self.lid_image.url
         except:
-            url = 'https://comgeld.s3.amazonaws.com/images/lids/user-default.png'
+            url = 'https://comgeld.s3.amazonaws.com/images/leden/user-default.png'
         return url
     class Meta: 
         ordering = ['lichting','vertical']
