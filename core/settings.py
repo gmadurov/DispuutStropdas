@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     #################
     'users.apps.UsersConfig',
     'links.apps.LinksConfig',
+    'agenda.apps.AgendaConfig',
     #################
     'django.contrib.sites',
     'allauth',
@@ -190,3 +191,4 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+LOGIN_REDIRECT_URL = 'account'

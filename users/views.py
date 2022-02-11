@@ -31,7 +31,7 @@ def loginUser(request):
         else:
             messages.error(request, 'Password is incorrect')
 
-    return render(request, 'users/login-register.html')
+    return render(request, 'users/login.html')
 
 
 def logoutUser(request):
@@ -42,9 +42,12 @@ def logoutUser(request):
 
 @login_required(login_url='login')
 def leden(request):
-    lidlist, search_query = searchLeden(request)
-    custom_range, lidlist = paginateLeden(request, lidlist, 3)
-    content = {'leden': lidlist,
+    # lidlist, search_query = searchLeden(request)
+    # custom_range, lidlist = paginateLeden(request, lidlist, 3)
+    search_query = 0
+    custom_range = 0
+    ledenlist = Lid.objects.all()
+    content = {'leden': ledenlist,
                'search_query': search_query, 'custom_range': custom_range}
     return render(request, 'users/leden.html', content)
 
