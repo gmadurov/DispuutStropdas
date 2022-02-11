@@ -23,6 +23,11 @@ whitenoise = "==5.3.0"
 Django = "==3.2.9"
 Pillow = "==8.4.0"
 SQLAlchemy = "==1.4.27"
+django-allauth = "*"
+google-api-python-client = "*"
+google-auth-httplib2 = "*"
+google-auth-oauthlib = "*"
+google-auth = "*"
 
 [dev-packages]
 yapf = "*"

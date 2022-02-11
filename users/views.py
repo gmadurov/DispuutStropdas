@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import LidForm
-from .utils import paginateLids, searchLids
+from .utils import paginateLeden, searchLeden
 # Create your views here.
 
 
@@ -13,7 +13,7 @@ def loginUser(request):
     page = 'login'
 
     if request.user.is_authenticated:
-        return redirect('lids')
+        return redirect('leden')
     if request.method == 'POST':
         username = request.POST['username'].lower()
         password = request.POST['password']
@@ -31,7 +31,7 @@ def loginUser(request):
         else:
             messages.error(request, 'Password is incorrect')
 
-    return render(request, 'users/login-register.html')
+    return render(request, 'users/login.html')
 
 
 def logoutUser(request):
@@ -41,19 +41,22 @@ def logoutUser(request):
 
 
 @login_required(login_url='login')
-def lids(request):
-    lidlist, search_query = searchLids(request)
-    custom_range, lidlist = paginateLids(request, lidlist, 3)
-    content = {'lids': lidlist,
+def leden(request):
+    # lidlist, search_query = searchLeden(request)
+    # custom_range, lidlist = paginateLeden(request, lidlist, 3)
+    search_query = 0
+    custom_range = 0
+    ledenlist = Lid.objects.all()
+    content = {'leden': ledenlist,
                'search_query': search_query, 'custom_range': custom_range}
-    return render(request, 'users/lids.html', content)
+    return render(request, 'users/leden.html', content)
 
 
 @login_required(login_url='login')
 def userLid(request, pk):
     lid = Lid.objects.get(id=pk)
     content = {'lid': lid}
-    return render(request, 'users/user-lid.html', content)
+    return render(request, 'users/user-profile.html', content)
 
 
 @login_required(login_url='login')
@@ -74,7 +77,7 @@ def editAccount(request):
             form.save()
             return redirect('account')
 
-    return render(request, 'users/lid-form.html', content)
+    return render(request, 'users/leden-form.html', content)
 
 def home(request):
     return render(request, 'home.html')

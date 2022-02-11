@@ -1,0 +1,52 @@
+{% extends 'main.html'%} {% block content%} Still have to add to add it to the calendar.google.com
+
+<div class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+  <table style="width: 100%; border: 1px solid black">
+    <th>Datum</th>
+    <th>Activiteit</th>
+    <th>Kokers</th>
+    <th>Omschrijving</th>
+    <th>Kartrekkers</th>
+    <th>Bijzonderheden</th>
+    <th>Budget</th>
+    {% for event in events %}
+    <tr>
+      <td style="text-align: center">{{event.start_time|default_if_none:""}}</td>
+      {% if event.summary == 'Wedstrijd' %}
+      <td style="text-align: center; background-color: red">
+        {{event.summary}}
+      </td>
+      {% elif event.summary == 'Dispuutsactiviteit'%}
+      <td style="text-align: center; background-color: green; color: white">
+        {{event.summary}}
+      </td>
+      {% elif event.summary == 'Dispuutsverjaardag'%}
+      <td style="text-align: center; background-color: #bbd334">
+        {{event.summary}}
+      </td>
+      {% elif event.summary == 'Clubactiviteit'%}
+      <td style="text-align: center; background-color: yellow">
+        {{event.summary}}
+      </td>
+      {% elif event.summary == 'Activiteit'%}
+      <td style="text-align: center; background-color: rgba(35, 32, 209, 0.685)">
+          {{event.summary}}
+      </td>
+      {%else %}
+      <td style="text-align: center;">
+          {{event.summary|default_if_none:""}}
+      </td>
+
+      {% endif %}
+      <td style="text-align: center">{{event.kokers|default_if_none:""}}</td>
+    
+      <td style="text-align: center">{{event.description}}</td>
+      <td style="text-align: center">{{event.kartrekkers|default_if_none:""}}</td>
+      <td style="text-align: center">{{event.bijzonderheden|default_if_none:""}}</td>
+      <td style="text-align: center">{{event.budget|default_if_none:""}}</td>
+    </tr>
+    {%endfor%}
+  </table>
+</div>
+
+{% endblock content%}

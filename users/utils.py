@@ -3,7 +3,7 @@ from .models import Lid
 from django.db.models import Q
 
 
-def searchLids(request):
+def searchLeden(request):
     search_query = ''
     if request.GET.get('search_query'):
         search_query = request.GET.get('search_query')
@@ -14,18 +14,18 @@ def searchLids(request):
     return lidlist, search_query
 
 
-def paginateLids(request, lids, results):
+def paginateLeden(request, leden, results):
     page = request.GET.get('page')
-    paginator = Paginator(lids, results)
+    paginator = Paginator(leden, results)
 
     try:
-        lids = paginator.page(page)
+        leden = paginator.page(page)
     except PageNotAnInteger:
         page = 1
-        lids = paginator.page(page)
+        leden = paginator.page(page)
     except EmptyPage:
         page = paginator.num_pages
-        lids = paginator.page(page)
+        leden = paginator.page(page)
     span = 4
     leftIndex = (int(page) - span)
     if leftIndex < 1:
@@ -35,4 +35,4 @@ def paginateLids(request, lids, results):
         rightIndex = paginator.num_pages + 1
     custom_range = range(leftIndex, rightIndex)
 
-    return custom_range, lids
+    return custom_range, leden

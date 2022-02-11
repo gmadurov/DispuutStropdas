@@ -24,7 +24,7 @@
           style="background-color:#FFF; padding; 20px; border: 1px solid grey;"
         >
           <div class="container">
-            <form class="form" action="" method="POST" style="">
+            <form  action="" method="POST" style="">
               {% csrf_token %}
               <div class="columns is-gapless">
                 <div
@@ -51,7 +51,6 @@
                   </div>
                   <div style="padding-top: 0px">
                     <input
-                      {% comment %} class="input" {% endcomment %}
                       style="width: 75%"
                       type="password"
                       name="password"

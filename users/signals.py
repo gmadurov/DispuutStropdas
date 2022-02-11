@@ -22,7 +22,7 @@ def createLid(sender, instance, created, **kwargs):
             email=user.email,
             name=user.first_name+ user.last_name
         )
-        subject = ' welcome to devserach'
+        subject = ' welcome to '
         message = ' thanks for joining'
         # send_mail(
         #     subject,

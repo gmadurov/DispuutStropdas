@@ -47,8 +47,18 @@ INSTALLED_APPS = [
 
     #################
     'users.apps.UsersConfig',
+    'links.apps.LinksConfig',
+    'agenda.apps.AgendaConfig',
     #################
+    # 'django.contrib.sites',
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.google',
+
 ]
+
+# SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -81,6 +91,9 @@ TEMPLATES = [
     },
 ]
 
+
+
+
 WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
@@ -104,6 +117,10 @@ DATABASES = {
         'PORT': port,
     }
 }
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 ###end
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -165,3 +182,13 @@ AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('BUCKET_NAME')
 ### end
+# SOCIALACCOUNT_PROVIDERS = {
+#     'google': {
+#         'APP': {
+#             'client_id': '123878689604-9nkm7r8u9mkr3tocvufb3ejslf93vo21.apps.googleusercontent.com',
+#             'secret': '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',
+#             'key': ''
+#         }
+#     }
+# }
+LOGIN_REDIRECT_URL = 'account'
