@@ -50,15 +50,15 @@ INSTALLED_APPS = [
     'links.apps.LinksConfig',
     'agenda.apps.AgendaConfig',
     #################
-    'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+    # 'django.contrib.sites',
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.google',
 
 ]
 
-SITE_ID = 1
+# SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -182,13 +182,13 @@ AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('BUCKET_NAME')
 ### end
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': '123878689604-9nkm7r8u9mkr3tocvufb3ejslf93vo21.apps.googleusercontent.com',
-            'secret': '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',
-            'key': ''
-        }
-    }
-}
+# SOCIALACCOUNT_PROVIDERS = {
+#     'google': {
+#         'APP': {
+#             'client_id': '123878689604-9nkm7r8u9mkr3tocvufb3ejslf93vo21.apps.googleusercontent.com',
+#             'secret': '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',
+#             'key': ''
+#         }
+#     }
+# }
 LOGIN_REDIRECT_URL = 'account'
