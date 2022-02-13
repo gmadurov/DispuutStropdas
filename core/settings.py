@@ -26,7 +26,7 @@ if os.getcwd() == '/home/gmadurov/websitebullshits/DispuutStropdas':
     from environment.env import setENV, setURL
     setURL(False)
     # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = False
+    DEBUG = True
 else:
     DEBUG = False
 
