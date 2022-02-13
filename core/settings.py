@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 if os.getcwd() == '/home/gmadurov/websitebullshits/DispuutStropdas':
     from environment.env import setENV, setURL
-    setURL()
+    setURL(False)
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = True
 else:
@@ -33,7 +33,7 @@ else:
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'stropdas.herokuapp.com']
 
 # Application definition
 

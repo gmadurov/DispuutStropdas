@@ -10,6 +10,7 @@ import uuid
 class Lid(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, null=True, blank=True)
+    initials = models.CharField(max_length=2, null=True, blank=True)
     name = models.CharField(max_length=200, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     educations = models.CharField(max_length=200, null=True, blank=True)

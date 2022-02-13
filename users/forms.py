@@ -9,8 +9,8 @@ from .models import  Lid
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['first_name', 'email',
-                  'username', 'password1', 'password2']
+        fields ='__all__'
+        exclude = ['user', 'lichting', 'vertical']
         labels = {
             'first_name': 'Name',
         }

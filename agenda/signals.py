@@ -12,7 +12,9 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-from .models import Event
+from users.models import Lid
+
+from .models import Event, NIEvent
 
 
 from django.db.models.signals import post_delete, post_save
@@ -69,7 +71,22 @@ def events_add(sender, instance=None,  **kwargs):
         event = service.events().insert(calendarId='primary', body=event).execute()
 
     except HttpError as error:
-        print('An error occurred: %s' % error)
+        # print('An error occurred: %s' % error)
+        pass
+
+def create_NI(sender, instance,created,  **kwargs):
+    # if created:
+        leden = Lid.objects.all()
+        even = instance
+        for li in leden: 
+            ni = NIEvent.objects.create(
+                event = even,
+                points = 0,
+                lid = li,
+                note = '',
+            )
+
+post_save.connect(create_NI, sender=Event)
 
 post_save.connect(events_add, sender=Event)
 # post_save.connect(updateUser, sender=Lid)
