@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 if os.getcwd() == '/home/gmadurov/websitebullshits/DispuutStropdas':
     from environment.env import setENV, setURL
-    setURL(False)
+    setURL()
     # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = True
+    DEBUG = False
 else:
     DEBUG = False
 
@@ -119,7 +119,6 @@ DATABASES = {
 }
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 ###end
 # Password validation
@@ -163,7 +162,7 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/images/'
 
 STATICFILES_DIRS = [BASE_DIR / 'static']
-MEDIA_ROOT = BASE_DIR / 'static/images'
+MEDIA_ROOT = BASE_DIR / 'staticfiles/images'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 ### end
 
