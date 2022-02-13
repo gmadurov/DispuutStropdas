@@ -26,9 +26,9 @@ if os.getcwd() == '/home/gmadurov/websitebullshits/DispuutStropdas':
     from environment.env import setENV, setURL
     setURL()
     # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = False
-else:
     DEBUG = True
+else:
+    DEBUG = False
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
