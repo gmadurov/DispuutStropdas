@@ -11,7 +11,7 @@ from .utils import future_events
 # Create your views here.
 @login_required(login_url='fakePage')
 def agenda(request):
-    evns = future_events(datetime.datetime.today())
+    evns = future_events((datetime.date.today() - datetime.timedelta(days=1)).isoformat())
     lid = request.user.lid
     # no_linked_account = False
     # try:

@@ -27,13 +27,13 @@ class Lid(models.Model):
                           primary_key=True, editable=False)
 
     def __str__(self):
-        return str(self.name)
+        return str(self.user.username)
     @property
     def imageURL(self):
         try:
             url = self.lid_image.url
         except:
-            url = 'https://comgeld.s3.amazonaws.com/images/leden/user-default.png'
+            url = ''
         return url
     class Meta: 
         ordering = ['lichting','vertical']

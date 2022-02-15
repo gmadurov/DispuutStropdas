@@ -17,6 +17,6 @@ from django.db.models import Q
 
 def future_events(date):
     fut_events = Event.objects.distinct().filter(
-        Q(start_time__gte= date)| Q(end_time__gte=date)
+        Q(start_date__gte= date)| Q(end_date__gte=date)
     )
     return fut_events

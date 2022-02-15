@@ -75,7 +75,7 @@ def events_add(sender, instance=None,  **kwargs):
         pass
 
 def create_NI(sender, instance,created,  **kwargs):
-    # if created:
+    if created:
         leden = Lid.objects.all()
         even = instance
         for li in leden: 
@@ -88,7 +88,7 @@ def create_NI(sender, instance,created,  **kwargs):
 
 post_save.connect(create_NI, sender=Event)
 
-post_save.connect(events_add, sender=Event)
+# post_save.connect(events_add, sender=Event)
 # post_save.connect(updateUser, sender=Lid)
 # post_delete.connect(test1, sender=Event)
 # Signal.connect(test1, sender=Event)

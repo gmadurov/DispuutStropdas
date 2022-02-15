@@ -7,11 +7,11 @@
         <th>Omschrijving</th>
 
         {% for lid in leden %}
-        <th>{{lid.name}}</th>
+        <th>{{lid.initials}}</th>
         {% endfor %}
         <tr>
           {% for event in events %}
-          <td style="text-align: center">{{event.start_time|date:"l j F"}}</td>
+          <td style="text-align: center">{{event.start_date|date:"l j F"}}</td>
           <td style="text-align: center">{{event.description}}</td>
           {% for point in event.nievent_set.all %}
           <td class="myDIV" style="text-align: center">
