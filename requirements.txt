@@ -4,6 +4,7 @@ cachetools==5.0.0
 certifi==2021.10.8
 charset-normalizer==2.0.12
 Django==4.0.2
+django-storages==1.12.3
 google-api-core==2.5.0
 google-api-python-client==2.37.0
 google-auth==2.6.0

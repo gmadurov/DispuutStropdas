@@ -1,13 +1,15 @@
 import datetime
-from django.shortcuts import render
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 from users.models import Lid
 
+from .models import AgendaClient, Event, NIEvent
 from .utils import future_events
 
-from .models import AgendaClient, Event, NIEvent
 
 # Create your views here.
+@login_required(login_url='fakePage')
 def agenda(request):
     evns = future_events(datetime.datetime.today())
     lid = request.user.lid
@@ -22,6 +24,7 @@ def agenda(request):
     content = { 'events':evns}
     return render(request, 'agenda/agenda.html', content)
 
+@login_required(login_url='fakePage')
 def dsani(request):
     events = Event.objects.all()
     ni_events = NIEvent.objects.all()
