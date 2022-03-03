@@ -85,6 +85,16 @@ def create_NI(sender, instance,created,  **kwargs):
                 lid = li,
                 note = '',
             )
+# def Update_DSANI_Events(sender,instance,created,**kwargs):
+#     if created:
+#         for LID in Lid.objects.all():
+#                 ni = NIEvent.objects.create(
+#                     event = instance,
+#                     points = 0,
+#                     lid = LID,
+#                     note = '',
+#                 )
+                # print(EVENT, LID)
 
 post_save.connect(create_NI, sender=Event)
 

@@ -36,10 +36,12 @@ class Event(models.Model):
     # Datum	Activiteit	Kokers	Omschrijving	Kartrekkers	Bijzonderheden	Budget
     def __str__(self):
         return str(self.summary)+ ','+ str(self.start_date)
+    class Meta:
+        ordering = ['start_date', 'start_time','-end_date']
 
 class NIEvent(models.Model):
     '''DSANI events links'''
-    event = models.ForeignKey(Event, on_delete= models.CASCADE)
+    event = models.ForeignKey(Event, on_delete= models.CASCADE, related_name='dsani_ev')
     lid = models.ForeignKey(Lid, on_delete= models.CASCADE)
     points = models.IntegerField()
     note = models.CharField(max_length=200, null=True, blank=True)
@@ -47,3 +49,4 @@ class NIEvent(models.Model):
         if self.note:
             return str(self.lid.initials)+ ', '+ str(self.note)
         return str(self.lid.initials)+ ', '+ str(self.event.description)
+        

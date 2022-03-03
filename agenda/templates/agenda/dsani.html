@@ -13,7 +13,7 @@
           {% for event in events %}
           <td style="text-align: center">{{event.start_date|date:"l j F"}}</td>
           <td style="text-align: center">{{event.description}}</td>
-          {% for point in event.nievent_set.all %}
+          {% for point in event.dsani_ev.all %}
           <td class="myDIV" style="text-align: center">
             {% if point.note%}
             <div class="dropdown is-hoverable">
