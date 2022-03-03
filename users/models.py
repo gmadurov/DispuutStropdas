@@ -36,4 +36,4 @@ class Lid(models.Model):
             url = ''
         return url
     class Meta: 
-        ordering = ['lichting','vertical']
+        ordering = ['lichting', 'vertical']

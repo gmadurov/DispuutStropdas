@@ -3,7 +3,7 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
-from .forms import EventForm
+from .forms import EventForm, NIEventForm
 from users.models import Lid
 
 from .models import AgendaClient, Event, NIEvent
@@ -30,8 +30,14 @@ def agenda(request):
 def dsani(request):
     events = Event.objects.all()
     ni_events = NIEvent.objects.all()
+    lid_NI = NIEvent.objects.filter(lid=request.user.lid)
+    dic_NI = {}
+    for ev in events:
+        dic_NI[ev] = (NIEvent.objects.filter(lid=request.user.lid, event = ev))
+        # print(ev)
+        # print(dic_NI[ev])
     leden = Lid.objects.all()
-    content = {'events': events, 'ni_events': ni_events, 'leden': leden}
+    content = {'events': events, 'ni_events': ni_events, 'leden': leden, 'dic_NI':dic_NI}
     return render(request, 'agenda/dsani.html', content)               
 
 
@@ -61,10 +67,17 @@ def edit_event(request, pk):
             return redirect('agenda')
     context = {'form': form}
     return render(request, "agenda/event-form.html", context)
-from django import template
 
-register = template.Library() 
-
-@register.filter(name='has_group') 
-def has_group(user, group_name):
-    return user.groups.filter(name=group_name).exists() 
+def edit_dsani(request,  pk):
+    lid = request.user.lid
+    nievent = NIEvent.objects.get(id=pk)
+    form = NIEventForm(instance=nievent)
+    if request.method == 'POST':  # checks the method
+        # creates the form object
+        form = NIEventForm(request.POST, instance=nievent)
+        if form.is_valid():  # if its valid
+            form.save()  # save the object to database
+            messages.info(request, 'Neuk Index was edited')
+            return redirect('DSANI')
+    context = {'form': form, 'event': nievent}
+    return render(request, "agenda/Neuk_index_form.html", context)

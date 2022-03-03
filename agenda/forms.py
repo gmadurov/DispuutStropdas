@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms.widgets import NumberInput
-from .models import  Event
+from .models import  Event, NIEvent
 
 
 class EventForm(ModelForm):
@@ -24,3 +24,14 @@ class EventForm(ModelForm):
             field.widget.attrs.update({'class': "input"})
     recuring = forms.ChoiceField(choices = REQ)
     summary = forms.ChoiceField(choices = summ)
+class NIEventForm(ModelForm):
+    class Meta:
+        model = NIEvent
+        fields = ['points', 'note']
+        widgets = {
+            'points':NumberInput(),
+        }
+    def __init__(self, *args, **kwargs):
+        super(NIEventForm, self).__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            field.widget.attrs.update({'class': "input"})

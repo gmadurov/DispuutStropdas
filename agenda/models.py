@@ -25,7 +25,7 @@ class Event(models.Model):
     description = models.CharField(max_length=50, null=True, blank=True)
     start_date = models.DateField()
     start_time = models.TimeField(null=True, blank=True)
-    end_date = models.DateField()
+    end_date = models.DateField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
     recuring = models.CharField(max_length=50, null=True, blank=True)
     location = models.CharField(max_length=50, null=True, blank=True)
@@ -35,7 +35,7 @@ class Event(models.Model):
     bijzonderheden = models.CharField(max_length=50, null=True, blank=True)
     # Datum	Activiteit	Kokers	Omschrijving	Kartrekkers	Bijzonderheden	Budget
     def __str__(self):
-        return str(self.summary)+ ','+ str(self.start_date)
+        return str(self.description)+ ','+ str(self.start_date)
     class Meta:
         ordering = ['start_date', 'start_time','-end_date']
 
@@ -49,4 +49,5 @@ class NIEvent(models.Model):
         if self.note:
             return str(self.lid.initials)+ ', '+ str(self.note)
         return str(self.lid.initials)+ ', '+ str(self.event.description)
-        
+    class Meta:
+        ordering = ['lid']
