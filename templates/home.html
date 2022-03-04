@@ -1,5 +1,5 @@
 <html>
-    {% load static %}
+  {% load static %}
 
   <head>
     <title>Dum Spiro Spero!</title>
@@ -11,6 +11,7 @@
       name="description"
       content="Het herendispuut STROPDAS der E.S.R. Theta"
     />
+    <link rel="shortcut icon" href="{% static 'images/blazoen.png'%}" />
 
     <style>
       #block {
@@ -26,7 +27,11 @@
   <body background="{% static 'images/blazoen_small.jpg'%}">
     <br /><br />
     <div align="center">
-      <img src="{% static 'images/blazoen.png'%}" border="0" usemap="#blazoen" />
+      <img
+        src="{% static 'images/blazoen.png'%}"
+        border="0"
+        usemap="#blazoen"
+      />
       <map name="blazoen">
         <area
           shape="circle"
@@ -48,7 +53,7 @@
       <div id="block">
         Krabbedampad 16 <br />
 
-        5611GW Eindhoven <br/>
+        5611GW Eindhoven <br />
 
         <a href="tel: +31 (0) 40 308 01 55"> +31 (0) 40 308 01 55</a>
       </div>
