@@ -46,7 +46,7 @@ def create_event(request):
     form = EventForm()
     if request.method == 'POST':  # checks the method
         # creates the form object
-        form = EventForm(request.POST, request.FILES)
+        form = EventForm(request.POST)
         if form.is_valid():  # if its valid
             form.save()  # save the object to database
             messages.info(request, 'Event was created')
@@ -55,12 +55,13 @@ def create_event(request):
     return render(request, "agenda/event-form.html", context)
 
 
+@login_required(login_url='login')
 def edit_event(request, pk):
     event = Event.objects.get(id=pk)
     form = EventForm(instance=event)
     if request.method == 'POST':  # checks the method
         # creates the form object
-        form = EventForm(request.POST, request.FILES)
+        form = EventForm(request.POST, instance= event)
         if form.is_valid():  # if its valid
             form.save()  # save the object to database
             messages.info(request, 'Event was edited')
@@ -68,6 +69,7 @@ def edit_event(request, pk):
     context = {'form': form}
     return render(request, "agenda/event-form.html", context)
 
+@login_required(login_url='login')
 def edit_dsani(request,  pk):
     lid = request.user.lid
     nievent = NIEvent.objects.get(id=pk)
