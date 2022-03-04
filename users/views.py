@@ -13,7 +13,7 @@ def loginUser(request):
     page = 'login'
 
     if request.user.is_authenticated:
-        return redirect('leden')
+        return redirect('agenda')
     if request.method == 'POST':
         username = request.POST['username'].lower()
         password = request.POST['password']
@@ -42,6 +42,7 @@ def logoutUser(request):
 
 @login_required(login_url='login')
 def leden(request):
+    # 
     # lidlist, search_query = searchLeden(request)
     # custom_range, lidlist = paginateLeden(request, lidlist, 3)
     search_query = 0
@@ -49,6 +50,7 @@ def leden(request):
     ledenlist = Lid.objects.all()
     content = {'leden': ledenlist,
                'search_query': search_query, 'custom_range': custom_range}
+    return redirect('agenda')
     return render(request, 'users/leden.html', content)
 
 

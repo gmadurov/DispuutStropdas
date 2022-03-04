@@ -22,23 +22,32 @@ class AgendaClient(models.Model):
 class Event(models.Model):
     
     summary = models.CharField(max_length=50)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
-    
+    description = models.CharField(max_length=50, null=True, blank=True)
+    start_date = models.DateField()
+    start_time = models.TimeField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+    end_time = models.TimeField(null=True, blank=True)
     recuring = models.CharField(max_length=50, null=True, blank=True)
     location = models.CharField(max_length=50, null=True, blank=True)
-    description = models.CharField(max_length=50, null=True, blank=True)
     kokers = models.CharField(max_length=50, null=True, blank=True)
     kartrekkers = models.CharField(max_length=50, null=True, blank=True)
     budget = models.CharField(max_length=50, null=True, blank=True)
     bijzonderheden = models.CharField(max_length=50, null=True, blank=True)
     # Datum	Activiteit	Kokers	Omschrijving	Kartrekkers	Bijzonderheden	Budget
     def __str__(self):
-        return str(self.summary)+ ','+ str(self.start_time)
+        return str(self.description)+ ','+ str(self.start_date)
+    class Meta:
+        ordering = ['start_date', 'start_time','-end_date']
 
 class NIEvent(models.Model):
     '''DSANI events links'''
-    event = models.ForeignKey(Event, on_delete= models.CASCADE)
+    event = models.ForeignKey(Event, on_delete= models.CASCADE, related_name='dsani_ev')
     lid = models.ForeignKey(Lid, on_delete= models.CASCADE)
     points = models.IntegerField()
     note = models.CharField(max_length=200, null=True, blank=True)
+    def __str__(self):
+        if self.note:
+            return str(self.lid.initials)+ ', '+ str(self.note)
+        return str(self.lid.initials)+ ', '+ str(self.event.description)
+    class Meta:
+        ordering = ['lid']

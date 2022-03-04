@@ -74,8 +74,9 @@ def events_add(sender, instance=None,  **kwargs):
         # print('An error occurred: %s' % error)
         pass
 
-def create_NI(sender, instance,created,  **kwargs):
-    # if created:
+def create_NI_event(sender, instance,created,  **kwargs):
+    '''creates NI events when a new event is created '''
+    if created:
         leden = Lid.objects.all()
         even = instance
         for li in leden: 
@@ -85,10 +86,33 @@ def create_NI(sender, instance,created,  **kwargs):
                 lid = li,
                 note = '',
             )
+def create_NI_user(sender, instance,created,  **kwargs):
+    '''creates NI events when a new profile is created '''
+    if created:
+        Events = Event.objects.all()
+        lid = instance.user.lid
+        for ev in Events: 
+            ni = NIEvent.objects.create(
+                event = ev,
+                points = 0,
+                lid = lid,
+                note = '',
+            )
+# def Update_DSANI_Events(sender,instance,created,**kwargs):
+#     if created:
+#         for LID in Lid.objects.all():
+#                 ni = NIEvent.objects.create(
+#                     event = instance,
+#                     points = 0,
+#                     lid = LID,
+#                     note = '',
+#                 )
+                # print(EVENT, LID)
 
-post_save.connect(create_NI, sender=Event)
+post_save.connect(create_NI_event, sender=Event)
+post_save.connect(create_NI_user, sender=Lid)
 
-post_save.connect(events_add, sender=Event)
+# post_save.connect(events_add, sender=Event)
 # post_save.connect(updateUser, sender=Lid)
 # post_delete.connect(test1, sender=Event)
 # Signal.connect(test1, sender=Event)

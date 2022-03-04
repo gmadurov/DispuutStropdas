@@ -22,6 +22,11 @@ def createLid(sender, instance, created, **kwargs):
             email=user.email,
             name=user.first_name+ user.last_name
         )
+    else:
+        user = instance
+        lid = user.lid
+        lid.name = user.first_name+ user.last_name
+        if user.email:        lid.email =user.email
         subject = ' welcome to '
         message = ' thanks for joining'
         # send_mail(
@@ -45,7 +50,8 @@ def updateUser(sender, instance, created, **kwargs):
     lid = instance
     user = lid.user
     if not created:
-        user.first_name, user.last_name = lid.name.split(' ')
+        try: user.first_name, user.last_name = lid.name.split(' ')
+        except: user.first_name= lid.name
         user.email = lid.email
         user.save()
         return 
