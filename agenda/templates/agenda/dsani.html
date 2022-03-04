@@ -1,6 +1,6 @@
-{% extends 'main.html'%} {% block content%}
-<div class="columns">
-  <div class="column is-4 is-offset-1">
+{% extends 'main.html'%} {% load auth_tags %}{% block content%}
+<div class="columns is-centered">
+  <div class="column is-two-thirds">
     <div class="table is-bordered is-striped is-narrow is-fullwidth">
       <table style="width: 100%; border: 1px solid black">
         <th>Datum</th>
@@ -22,7 +22,7 @@
               <div class="dropdown-menu" id="dropdown-menu4" role="menu">
                 <div class="dropdown-content">
                   <div class="dropdown-item">
-                    {% if request.user.lid == point.lid %}
+                    {% if request.user.lid == point.lid or request.user|has_group:"Senate"%}
                     <a href="{% url 'edit-dsani' point.id %}">Edit</a>{% endif%}
                     <p>{{point.note}}</p>
                   </div>
@@ -31,8 +31,8 @@
             </div>
             {% else %}
             <span>
-              {% if request.user.lid == point.lid %}
-              <a href="{% url 'edit-dsani' point.id %}"> {{point.points}}</a> {% else %} <p>{{point.points}}</p>{%endif %}
+              {% if request.user.lid == point.lid  or request.user|has_group:"Senate"%}
+              <a href="{% url 'edit-dsani' point.id %}">{{point.points}}</a> {% else %} <p>{{point.points}}</p>{%endif %}
             </span>
             {%endif%}
           </td>
@@ -42,7 +42,7 @@
       </table>
     </div>
   </div>
-  <div class="column"></div>
+  {% comment %} <div class="column"></div> {% endcomment %}
 </div>
 
 {% endblock content%}

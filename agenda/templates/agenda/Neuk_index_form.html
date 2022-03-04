@@ -1,8 +1,8 @@
 {% extends 'main.html'%} {% block content%}
 
 <!-- Main Section -->
-<main class="formPage my-xl">
-  <div class="content-box">
+<main class="formPage columns is-centered">
+  <div class="column is-3 content-box">
     <div class="formWrapper">
       <a class="backButton" href="{{request.GET.next}}"
         ><i class="im im-angle-left"></i
@@ -23,6 +23,8 @@
         </div>
 
         {% endfor %}
+      </br>
+      
         <input
           class="btn btn--sub btn--lg my-md"
           type="submit"
