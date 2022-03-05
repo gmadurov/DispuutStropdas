@@ -48,7 +48,16 @@ def create_event(request):
         # creates the form object
         form = EventForm(request.POST)
         if form.is_valid():  # if its valid
-            form.save()  # save the object to database
+            event = form.save(commit=False)  # save the object to database
+            if not event.end_date:
+                event.end_date = event.start_date
+            if not event.end_time and event.start_time:
+                event.end_time = event.start_time
+            elif not event.end_time:
+                event.end_time = datetime.datetime.min.time()
+            if not event.start_time:
+                event.start_time = datetime.datetime.min.time()
+            event.save()
             messages.info(request, 'Event was created')
             return redirect('agenda')
     context = {'form': form}
@@ -63,11 +72,30 @@ def edit_event(request, pk):
         # creates the form object
         form = EventForm(request.POST, instance= event)
         if form.is_valid():  # if its valid
-            form.save()  # save the object to database
+            event = form.save(commit=False)  # save the object to database
+            if not event.end_date:
+                event.end_date = event.start_date
+            if not event.end_time and event.start_time:
+                event.end_time = event.start_time
+            elif not event.end_time:
+                event.end_time = datetime.datetime.min.time()
+            if not event.start_time:
+                event.start_time = datetime.datetime.min.time()
+            event.save()
             messages.info(request, 'Event was edited')
             return redirect('agenda')
     context = {'form': form}
     return render(request, "agenda/event-form.html", context)
+
+@login_required(login_url='login')
+def delete_event(request, pk):
+    event = Event.objects.get(id=pk)
+    if request.method == "POST":
+        event.delete()
+        messages.info(request, 'Event deleted')
+        return redirect('agenda')
+    content = {'object': event}
+    return render(request, 'delete-template.html', content)
 
 @login_required(login_url='login')
 def edit_dsani(request,  pk):

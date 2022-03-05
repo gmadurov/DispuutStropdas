@@ -69,7 +69,8 @@
           </td>
           {% if request.user|has_group:"Senate" %} 
           <td style="text-align: center" >
-            <a href="{% url 'editEvent' event.id %}"> Edit</a>
+            <a href="{% url 'editEvent' event.id %}">Edit</a>
+            <a href="{% url 'deleteEvent' event.id %}">Delete</a>
           </td>
           {% endif %}
         </tr>

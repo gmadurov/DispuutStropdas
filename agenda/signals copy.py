@@ -1,7 +1,6 @@
 from __future__ import print_function
 
 import datetime
-import json
 import os.path
 from pathlib import Path
 from pprint import pprint
@@ -20,30 +19,31 @@ from .models import AgendaClient, Event, NIEvent
 # If modifying these scopes, delete the file token.json.
 # SCOPES = ['https://www.googleapis.com/auth/calendar']
 # SCOPES = ['https://www.googleapis.com/auth/calendar','https://www.googleapis.com/auth/calendar.events','https://www.googleapis.com/auth/calendar.events.readonly','https://www.googleapis.com/auth/calendar.readonly']
-try:
-    SCOPES = (AgendaClient.objects.get(name='SCOPES').json).strip("][").split(', ')
-except: pass
+SCOPES = (AgendaClient.objects.get(name='SCOPES').json).strip("][").split(', ')
 def get_service():
     '''this functions gets and builds the service using the token and the client_secret'''
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    if len(AgendaClient.objects.filter(name='token'))==1:
-            creds = Credentials.from_authorized_user_info(json.loads(AgendaClient.objects.get(name='token').json), SCOPES)
-
+    if os.path.exists('agenda/token.json'):
+        creds = Credentials.from_authorized_user_file('agenda/token.json', SCOPES)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_config(
-                    json.loads(AgendaClient.objects.get(name='client_secret').json), SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'agenda/client_secret.json', SCOPES)
             creds = flow.run_local_server(port=0)
-    # Save the credentials for the next run
-    AgendaClient.objects.update_or_create(name='token', defaults = {'json':creds.to_json()})
+        # Save the credentials for the next run
+        with open('agenda/token.json', 'w') as token:
+            token.write(creds.to_json())
+    # try:
     service = build('calendar', 'v3', credentials=creds)
     return service
+
+    
     
 def handle_event(sender,created, instance=None,  **kwargs):
     """this function creates the events in the google agenda and updates them if changed in the website
@@ -51,9 +51,9 @@ def handle_event(sender,created, instance=None,  **kwargs):
     service = get_service()
     evs = instance
     event ={
-    'summary': evs.description,
+    'summary': evs.summary +' '+ evs.description,
     'location': evs.location or "",
-    'description': (evs.description+' '+ evs.summary),
+    'description': evs.description or "",
     'start': {
         'dateTime': datetime.datetime.combine(evs.start_date,evs.start_time).isoformat(),
         'timeZone': 'Europe/Amsterdam',
@@ -63,10 +63,9 @@ def handle_event(sender,created, instance=None,  **kwargs):
         'timeZone': 'Europe/Amsterdam',
     },
     'recurrence': [],'reminders': {}}
-
-    if created or not instance.google_link:
+    if created:
         try:
-            event = service.events().insert(calendarId=AgendaClient.objects.get(name='calendarId').json, body=event).execute()
+            event = service.events().insert(calendarId='primary', body=event).execute()
             instance.google_link = event['id']
             instance.save()
         except HttpError as error:
@@ -74,8 +73,7 @@ def handle_event(sender,created, instance=None,  **kwargs):
             pass
     else:  
         try:
-            # print(type(AgendaClient.objects.get(name='calendarId').json))
-            event = service.events().update(calendarId=AgendaClient.objects.get(name='calendarId').json, body=event, eventId = instance.google_link).execute()
+            event = service.events().update(calendarId='primary', body=event, eventId = instance.google_link).execute()
         except HttpError as error:
             print('An error occurred: %s' % error)
             pass
@@ -84,7 +82,7 @@ def delete_event(sender, instance,  **kwargs):
     '''this function deletes an event from google agenda whendeleted in the website'''
     try:
         service = get_service()
-        service.events().delete(calendarId=AgendaClient.objects.get(name='calendarId').json, eventId=instance.google_link ).execute()
+        service.events().delete(calendarId='primary', eventId=instance.google_link ).execute()
         # messages.info('Deleting event from google agenda')
     except:
         pass

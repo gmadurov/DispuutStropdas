@@ -12,8 +12,12 @@ from googleapiclient.errors import HttpError
 # If modifying these scopes, delete the file token.json.
 # SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 SCOPES = ['https://www.googleapis.com/auth/calendar','https://www.googleapis.com/auth/calendar.events','https://www.googleapis.com/auth/calendar.events.readonly','https://www.googleapis.com/auth/calendar.readonly']
-
-
+# flow = InstalledAppFlow.from_client_secrets_file(
+#                 '/home/gmadurov/websitebullshits/DispuutStropdas/agenda/client_secret.json', SCOPES).run_local_server(port=0)
+# https://www.googleapis.com/auth/calendar
+# https://www.googleapis.com/auth/calendar.events
+#  https://www.googleapis.com/auth/calendar.events.readonly
+#  https://www.googleapis.com/auth/calendar.readonly
 def get_events():
     """Shows basic usage of the Google Calendar API.
     Prints the start and name of the next 10 events on the user's calendar.
@@ -58,7 +62,7 @@ def get_events():
 
     except HttpError as error:
         print('An error occurred: %s' % error)
-def events_add(summary='', start=None, end=None):
+def events_add():
     """Shows basic usage of the Google Calendar API.
     Prints the start and name of the next 10 events on the user's calendar.
     """
@@ -108,7 +112,7 @@ def events_add(summary='', start=None, end=None):
                 'timeZone': 'America/Los_Angeles',
             },
             'end': {
-                'dateTime': '2015-05-28T17:00:00-07:00',
+                'dateTime': '2030-05-28T17:00:00-07:00',
                 'timeZone': 'America/Los_Angeles',
             },
             'recurrence': [
@@ -134,8 +138,8 @@ def events_add(summary='', start=None, end=None):
         print('An error occurred: %s' % error)
 
 
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    events_add()
 
 def initialize():
     """Shows basic usage of the Google Calendar API.
