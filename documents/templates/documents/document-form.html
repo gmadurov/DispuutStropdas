@@ -1,0 +1,18 @@
+{% extends 'main.html' %} {% block content%}
+<!-- Main Section -->
+<main class="columns is-centered">
+    <div class="column is-one-third">
+        <form class="form" action="" method="POST" enctype="multipart/form-data">
+            <!-- Input:Text -->{% csrf_token %} 
+            {% for field in form %}
+
+            <div class="form__field">
+                <label for="formInput#text">{{field.label}}: </label>
+                {{field}}
+            </div>
+            {% endfor %}
+            <input class="btn btn--sub btn--lg  my-md" type="submit" value="Submit" />
+        </form>
+    </div>
+</main>
+{% endblock content%}

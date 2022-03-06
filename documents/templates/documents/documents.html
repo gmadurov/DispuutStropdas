@@ -1,0 +1,22 @@
+{% extends 'main.html' %} {% block content%}
+<main class="columns is-centered">
+  <div class="column is-2 is-offset-2 card">
+    <div class="">
+      {% for year in years %}
+      <li><a href="{% url 'documentsPerYear' year%}">{{year}}</a></li>
+      {%endfor%}
+    </div>
+  </div>
+
+  <div class="column is-3 card" style="text-align: left; padding-left: 10px;">
+      {% for document in documents %}
+      <li>
+        <a href="{% url 'document' document.id%}?next={% url 'documents'%}">
+          {{document.name}}</a
+        >
+      </li>
+      {%endfor%}
+  </div>
+  <a href="{% url 'add-document'%}"> Document toevoeren </a>
+</main>
+{% endblock content%}

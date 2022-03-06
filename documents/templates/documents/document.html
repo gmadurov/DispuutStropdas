@@ -1,0 +1,21 @@
+{% extends 'main.html'%} {% load auth_tags %}{% block content%}
+<main>
+<div class="columns is-centered ">
+    <div class="column is-two-thirds">
+        <a class="button" href="{{request.GET.next}}"><i class="im im-angle-left">Terug</i></a>
+        <br />
+  
+        <div style="text-align:center">
+          <p>{{document.name}}</p>
+          <br/>
+          <iframe src="{{document.file.url}}" type="application/pdf" frameborder="0" scrolling="auto"
+            height="1000px" width="100%"></iframe>
+          <br/>
+          {% comment %} <embed src="{{document.url}}" type="application/pdf" frameborder="0" scrolling="auto"
+            height="100%" width="100%"></embed> {% endcomment %}
+  
+      </div>
+    </div>
+  </div>
+  </main>
+{% endblock content%}

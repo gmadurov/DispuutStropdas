@@ -24,7 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 if os.getcwd() == '/home/gmadurov/websitebullshits/DispuutStropdas':
     from environment.env import setENV, setURL
-    setURL()
+    # set to false before uploading
+    setURL(False)
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = True
 else:
@@ -49,7 +50,8 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'links.apps.LinksConfig',
     'agenda.apps.AgendaConfig',
-    # 'storages',
+    'documents.apps.DocumentsConfig',
+    'storages',
     #################
     # 'django.contrib.sites',
     # 'allauth',
@@ -165,9 +167,11 @@ STATIC_URL = '/static/'
 # start
 MEDIA_URL = '/images/'
 
-STATICFILES_DIRS = [BASE_DIR / 'static']
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
+MEDIA_ROOT = BASE_DIR / 'static/images'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 ### end
 
 # Default primary key field type
@@ -176,14 +180,14 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # # start
 
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-# AWS_QUERYSTRING_AUTH = False
-# AWS_S3_FILE_OVERWRITE = False
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_FILE_OVERWRITE = False
 
-# AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-# AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-# AWS_STORAGE_BUCKET_NAME = os.environ.get('BUCKET_NAME')
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('BUCKET_NAME')
 ### end
 # SOCIALACCOUNT_PROVIDERS = {
 #     'google': {

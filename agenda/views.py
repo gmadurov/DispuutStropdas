@@ -3,10 +3,11 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
-from .forms import EventForm, NIEventForm
 from users.models import Lid
 
-from .models import AgendaClient, Event, NIEvent
+from .forms import EventForm, NIEventForm
+from .models import Event, NIEvent
+from .signals import get_service
 from .utils import future_events
 
 
@@ -15,12 +16,13 @@ from .utils import future_events
 def agenda(request):
     evns = future_events((datetime.date.today() - datetime.timedelta(days=1)).isoformat())
     lid = request.user.lid
-    # no_linked_account = False
-    # try:
-    #     client = AgendaClient.objects.get(lid_id=lid.id)
-    # except: 
-    #     no_linked_account =True
-    #     client = None
+    try:
+        pass
+        # refresh the token of the agenda
+        # (get_service(True))
+    except: 
+        messages.error(request,'token not updated')
+        pass
     
 
     content = { 'events':evns}
@@ -111,3 +113,8 @@ def edit_dsani(request,  pk):
             return redirect('DSANI')
     context = {'form': form, 'event': nievent}
     return render(request, "agenda/Neuk_index_form.html", context)
+
+
+def try_out(request):
+    context = {}
+    return render(request, "try_out.html", context)

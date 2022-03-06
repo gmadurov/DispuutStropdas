@@ -23,7 +23,7 @@ from .models import AgendaClient, Event, NIEvent
 try:
     SCOPES = (AgendaClient.objects.get(name='SCOPES').json).strip("][").split(', ')
 except: pass
-def get_service():
+def get_service(refresh = False):
     '''this functions gets and builds the service using the token and the client_secret'''
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
@@ -42,8 +42,9 @@ def get_service():
             creds = flow.run_local_server(port=0)
     # Save the credentials for the next run
     AgendaClient.objects.update_or_create(name='token', defaults = {'json':creds.to_json()})
-    service = build('calendar', 'v3', credentials=creds)
-    return service
+    if not refresh:
+        service = build('calendar', 'v3', credentials=creds)
+        return service
     
 def handle_event(sender,created, instance=None,  **kwargs):
     """this function creates the events in the google agenda and updates them if changed in the website
