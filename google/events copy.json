@@ -1,0 +1,44 @@
+{
+  "kind": "calendar#events",
+  "etag": "\"p32o8t6n0h7qfa0g\"",
+  "summary": "gmadurov@gmail.com",
+  "updated": "2022-02-10T02:21:35.966Z",
+  "timeZone": "Europe/Amsterdam",
+  "accessRole": "owner",
+  "defaultReminders": [{ "method": "popup", "minutes": 30 }],
+  "nextPageToken": "ElcKTF82NHNrYWhhNjY1MWpnYjlsNjRvamNiOWs4ZDMzNGI5bzZrb2syYjlqNjBzajhjMWo2MTFqNGQxcDZjXzIwMjUxMjI0VDA4MDAwMFoYgIjYlO7VkQMiBwgFEM7d4x8=",
+  "items": [
+    {
+      "kind": "calendar#event",
+      "etag": "\"3288808323526000\"",
+      "id": "_64skaha6651jgb9l64ojcb9k8d334b9o6kok2b9j60sj8c1j611j4d1p6c_20220216T080000Z",
+      "status": "confirmed",
+      "htmlLink": "https://www.google.com/calendar/event?eid=XzY0c2thaGE2NjUxamdiOWw2NG9qY2I5azhkMzM0YjlvNmtvazJiOWo2MHNqOGMxajYxMWo0ZDFwNmNfMjAyMjAyMTZUMDgwMDAwWiBnbWFkdXJvdkBt",
+      "created": "2022-02-09T10:56:01.000Z",
+      "updated": "2022-02-09T10:56:01.821Z",
+      "summary": "WWWcie meeting ",
+      "creator": { "email": "gmadurov@gmail.com", "self": true },
+      "organizer": { "email": "gmadurov@gmail.com", "self": true },
+      "start": {
+        "dateTime": "2022-02-16T09:00:00+01:00",
+        "timeZone": "Europe/Amsterdam"
+      },
+      "end": {
+        "dateTime": "2022-02-16T10:00:00+01:00",
+        "timeZone": "Europe/Amsterdam"
+      },
+      "recurringEventId": "_64skaha6651jgb9l64ojcb9k8d334b9o6kok2b9j60sj8c1j611j4d1p6c",
+      "originalStartTime": {
+        "dateTime": "2022-02-16T09:00:00+01:00",
+        "timeZone": "Europe/Amsterdam"
+      },
+      "iCalUID": "19EEF1C8-5116-4CF2-851A-3094030C2493",
+      "sequence": 0,
+      "reminders": {
+        "useDefault": false,
+        "overrides": [{ "method": "popup", "minutes": 30 }]
+      },
+      "eventType": "default"
+    }
+  ]
+}

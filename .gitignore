@@ -1,0 +1,4 @@
+environment/
+.vscode/
+django-google*
+gitlab*

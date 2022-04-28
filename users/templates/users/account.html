@@ -1,0 +1,27 @@
+{% extends 'main.html'%}
+{% block content%}
+
+</header>
+
+<!-- Main Section -->
+<main>
+  <div class="container">
+    <div class="layout">
+      <div class="column column--1of3">
+        <div class="card text-center">
+          <div class="card__body">
+            <a class="tag tag--pill tag--main settings__btn" href="{% url 'edit-account' %}?next=/account"><i
+                class="im im-edit"></i>
+              Edit</a>
+            <img class="avatar avatar--xl dev__avatar" src="{{lid.imageURL}}" />
+            <h2 class="dev__name">{{lid.name}}</h2>
+            <p class="dev__title">
+              {{lid.short_intro}}
+            </p>
+              </div>
+            </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content%}

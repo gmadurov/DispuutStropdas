@@ -1,0 +1,27 @@
+{% extends 'main.html' %} {% block content%}
+<!-- Main Section -->
+<main class="columns is-centered">
+  <div class="column is-one-third">
+    <div class="table is-bordered is-striped is-narrow is-hoverable is-centered is-three-forths">
+
+      <form class="form" method="POST">
+        {% csrf_token %}
+        <table style="width: 100%; border: 1px solid black">
+          {% comment %} <tr>  {% endcomment %}
+          {% for field in form %}
+          <!-- Input:{{field.label}} -->
+          {% comment %} <td class="form__field"> {% endcomment %}
+            <label for="formInput#text">{{field.label}}: </label>
+            {{field}}
+              {% comment %} </td> {% endcomment %}
+          {% endfor %}</tr>
+        </table>
+
+
+    </div>
+    <input class="btn btn--sub btn--lg  my-md" type="submit" value="Submit" />
+    </form>
+  </div>
+  </div>
+</main>
+{% endblock content%}

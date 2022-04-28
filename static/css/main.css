@@ -1,0 +1,25 @@
+body {
+  text-align: center;
+}
+
+h1 {
+  font-family: Verdana, Arial;
+  font-size: 0.8em;
+}
+.menu {
+  padding: 10px;
+  background-color: black;
+  margin-top: 20px;
+}
+.menu a {
+  text-decoration: none;
+  color: #000;
+  margin-right: 30px;
+  text-align: left;
+}
+.menu a:hover {
+  text-decoration: underline;
+}
+/* table, th, td {
+  border:1px solid black;
+} */
