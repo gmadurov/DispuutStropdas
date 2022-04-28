@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'links.apps.LinksConfig',
     'agenda.apps.AgendaConfig',
     'documents.apps.DocumentsConfig',
+    'finance.apps.FinanceConfig',
     'storages',
     #################
     # 'django.contrib.sites',
