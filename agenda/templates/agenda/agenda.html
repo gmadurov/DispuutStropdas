@@ -2,10 +2,8 @@
 {% block content%}
 <div class="columns">
   <div class="column is-offset-2 is-8">
-    <div
-      class="table is-bordered is-striped is-narrow is-hoverable is-centered is-three-forths"
-    >
-      
+    <div class="table is-bordered is-striped is-narrow is-hoverable is-centered is-three-forths">
+
       <table style="width: 100%; border: 1px solid black">
         <th>Datum</th>
         <th>Activiteit</th>
@@ -14,7 +12,7 @@
         <th>Kartrekkers</th>
         <th>Bijzonderheden</th>
         <th>Budget</th>
-        {% if request.user|has_group:"Senate" %} 
+        {% if request.user|has_group:"Senate" %}
         <th><a href="{%url 'createEvent' %}">Add Event</a></th>
         {% endif %}
         {% for event in events %}
@@ -30,6 +28,10 @@
           <td style="text-align: center; background-color: green; color: white">
             {{event.summary}}
           </td>
+          {% elif event.summary == 'Borrel'%}
+          <td style="text-align: center; background-color: pink; color: black">
+            {{event.summary}}
+          </td>
           {% elif event.summary == 'Dispuutsverjaardag'%}
           <td style="text-align: center; background-color: #bbd334">
             {{event.summary}}
@@ -39,12 +41,10 @@
             {{event.summary}}
           </td>
           {% elif event.summary == 'Activiteit'%}
-          <td
-            style="
+          <td style="
               text-align: center;
               background-color: rgba(35, 32, 209, 0.685);
-            "
-          >
+            ">
             {{event.summary}}
           </td>
           {%else %}
@@ -67,8 +67,8 @@
           <td style="text-align: center">
             {{event.budget|default_if_none:""}}
           </td>
-          {% if request.user|has_group:"Senate" %} 
-          <td style="text-align: center" >
+          {% if request.user|has_group:"Senate" %}
+          <td style="text-align: center">
             <a href="{% url 'editEvent' event.id %}">Edit</a>
             <a href="{% url 'deleteEvent' event.id %}">Delete</a>
           </td>

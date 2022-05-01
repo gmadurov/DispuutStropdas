@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.getcwd() == '/home/gmadurov/websitebullshits/DispuutStropdas':
+if os.getcwd() == '/home/gusmadvol/WebDev/DispuutStropdas':
     from environment.env import setENV, setURL
     # set to false before uploading
     setURL(False)

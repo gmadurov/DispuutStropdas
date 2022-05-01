@@ -117,8 +117,8 @@ def create_NI_user(sender, instance,created,  **kwargs):
             )
 
 
-post_save.connect(create_NI_event, sender=Event)
-post_save.connect(create_NI_user, sender=Lid)
+# post_save.connect(create_NI_event, sender=Event)
+# post_save.connect(create_NI_user, sender=Lid)
 
-post_save.connect(handle_event, sender=Event)
-post_delete.connect(delete_event, sender=Event)
+# post_save.connect(handle_event, sender=Event)
+# post_delete.connect(delete_event, sender=Event)

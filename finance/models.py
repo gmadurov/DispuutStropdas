@@ -26,9 +26,7 @@ class Decla(models.Model):
     event = models.ForeignKey(Event, on_delete=models.SET_NULL, null=True, blank=True)
     content = models.TextField(max_length=50)
     total = models.FloatField()
-
     present = models.ManyToManyField(Lid, blank=True, related_name='present_leden')
-
     senate_year = models.IntegerField(
         default=senate_jaar()
     )
