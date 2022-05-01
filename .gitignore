@@ -2,4 +2,3 @@ environment/
 .vscode/
 django-google*
 gitlab*
-API/

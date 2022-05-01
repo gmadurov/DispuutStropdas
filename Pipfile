@@ -38,6 +38,8 @@ Pillow = "==9.0.1"
 django-storages = "==1.12.3"
 protobuf = "==3.19.4"
 boto3 = "*"
+djangorestframework = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 yapf = "*"

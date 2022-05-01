@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'agenda.apps.AgendaConfig',
     'documents.apps.DocumentsConfig',
     'finance.apps.FinanceConfig',
+    'rest_framework',
     'storages',
     #################
     # 'django.contrib.sites',
