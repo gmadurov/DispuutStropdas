@@ -56,6 +56,6 @@ def updateUser(sender, instance, created, **kwargs):
         user.save()
         return 
 
-post_save.connect(createLid, sender=User)
-post_save.connect(updateUser, sender=Lid)
-post_delete.connect(deleteUser, sender=Lid)
+# post_save.connect(createLid, sender=User)
+# post_save.connect(updateUser, sender=Lid)
+# post_delete.connect(deleteUser, sender=Lid)
