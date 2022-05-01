@@ -10,7 +10,7 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields ='__all__'
-        exclude = ['user', 'lichting', 'vertical']
+        exclude = ['id', 'user', 'lichting', 'vertical']
         labels = {
             'first_name': 'Name',
         }

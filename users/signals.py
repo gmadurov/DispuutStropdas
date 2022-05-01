@@ -3,6 +3,7 @@
 # @receiver(post_save, sender= Lid)
 
 
+from datetime import datetime
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
@@ -14,21 +15,29 @@ from django.conf import settings
 from .models import Lid
 
 
+def verti():
+    return len(Lid.objects.filter(lichting=datetime.today().year))+1
+
+
 def createLid(sender, instance, created, **kwargs):
     if created:
         user = instance
         lid = Lid.objects.create(
             user=user,
             email=user.email,
-            name=user.first_name+ user.last_name
+            name=user.first_name + user.last_name,
+            lichting=datetime.today().year,
+            vertical=verti(),
+            id = datetime.today().year*10 + verti()-1,
         )
     else:
         user = instance
         lid = user.lid
-        lid.name = user.first_name+ user.last_name
-        if user.email:        lid.email =user.email
-        subject = ' welcome to '
-        message = ' thanks for joining'
+        lid.name = user.first_name + user.last_name
+        if user.email:
+            lid.email = user.email
+        subject = " welcome to "
+        message = " thanks for joining"
         # send_mail(
         #     subject,
         #     message,
@@ -37,25 +46,31 @@ def createLid(sender, instance, created, **kwargs):
         #     fail_silently = False
         # )
 
+
 # @receiver(post_delete, sender= Lid)
 
 
-def deleteUser(sender, instance,  **kwargs):
+def deleteUser(sender, instance, **kwargs):
     try:
         user = instance.user
         user.delete()
-    except: pass
+    except:
+        pass
+
 
 def updateUser(sender, instance, created, **kwargs):
     lid = instance
     user = lid.user
     if not created:
-        try: user.first_name, user.last_name = lid.name.split(' ')
-        except: user.first_name= lid.name
+        try:
+            user.first_name, user.last_name = lid.name.split(" ")
+        except:
+            user.first_name = lid.name
         user.email = lid.email
         user.save()
-        return 
+        return
 
-# post_save.connect(createLid, sender=User)
-# post_save.connect(updateUser, sender=Lid)
-# post_delete.connect(deleteUser, sender=Lid)
+
+post_save.connect(createLid, sender=User)
+post_save.connect(updateUser, sender=Lid)
+post_delete.connect(deleteUser, sender=Lid)
