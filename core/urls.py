@@ -28,6 +28,7 @@ urlpatterns = [
     path('', include('users.urls')),
     path('', include('agenda.urls')),
     path('', include('documents.urls')),
+    path('', include('finance.urls')),
 
     path('api/', include('API.urls')),
     # path('accounts/', include('allauth.urls')),

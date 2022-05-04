@@ -20,8 +20,15 @@ class AgendaClient(models.Model):
 
 
 class Event(models.Model):
-    
-    summary = models.CharField(max_length=50)
+    EVENT_CHOICES = (
+        ("Activiteit", "Activiteit"),
+        ("Borrel", "Borrel"),
+        ("Clubactiviteit", "Clubactiviteit"),
+        ("Wedstrijd", "Wedstrijd"),
+        ("Dispuutsactiviteit", "Dispuutsactiviteit"),
+        ("Dispuutsverjaardag", "Dispuutsverjaardag"),
+    )
+    summary = models.CharField(max_length=50, choices=EVENT_CHOICES)
     description = models.CharField(max_length=50, null=True, blank=True)
     start_date = models.DateField()
     start_time = models.TimeField(null=True, blank=True)
@@ -37,7 +44,7 @@ class Event(models.Model):
 
     # Datum	Activiteit	Kokers	Omschrijving	Kartrekkers	Bijzonderheden	Budget
     def __str__(self):
-        return str(self.description)+ ','+ str(self.start_date)
+        return str(self.description)+ ', '+ str(self.start_date)
     class Meta:
         ordering = ['start_date', 'start_time','-end_date']
 

@@ -1,90 +1,104 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
-from .models import  Lid
+from .models import Lid
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import LidForm
-from .utils import paginateLeden, searchLeden
+from .utils import paginateLeden, presentLid, searchLeden
+from finance.models import Decla, Stand
+
 # Create your views here.
 
 
 def loginUser(request):
-    page = 'login'
+    page = "login"
 
     if request.user.is_authenticated:
-        return redirect('agenda')
-    if request.method == 'POST':
-        username = request.POST['username'].lower()
-        password = request.POST['password']
+        return redirect("agenda")
+    if request.method == "POST":
+        username = request.POST["username"].lower()
+        password = request.POST["password"]
         try:
             user = User.objects.get(username=username)
         except:
-            messages.error(request, 'Username does not exist')
+            messages.error(request, "Username does not exist")
 
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
-            messages.info(request, 'User was logged in')
-            return redirect(request.GET['next']if 'next' in request.GET else 'agenda')
+            messages.info(request, "User was logged in")
+            return redirect(request.GET["next"] if "next" in request.GET else "agenda")
         else:
-            messages.error(request, 'Password is incorrect')
+            messages.error(request, "Password is incorrect")
 
-    return render(request, 'users/login.html')
+    return render(request, "users/login.html")
 
 
 def logoutUser(request):
     logout(request)
     messages.info(request, "User logged out")
-    return redirect('login')
+    return redirect("login")
 
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def leden(request):
-    # 
+    #
     # lidlist, search_query = searchLeden(request)
     # custom_range, lidlist = paginateLeden(request, lidlist, 3)
     search_query = 0
     custom_range = 0
     ledenlist = Lid.objects.all()
-    content = {'leden': ledenlist,
-               'search_query': search_query, 'custom_range': custom_range}
-    return redirect('agenda')
-    return render(request, 'users/leden.html', content)
+    content = {
+        "leden": ledenlist,
+        "search_query": search_query,
+        "custom_range": custom_range,
+    }
+    return redirect("agenda")
+    return render(request, "users/leden.html", content)
 
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def userLid(request, pk):
     lid = Lid.objects.get(id=pk)
-    content = {'lid': lid}
-    return render(request, 'users/user-profile.html', content)
+    content = {"lid": lid}
+    return render(request, "users/user-profile.html", content)
 
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def userAccount(request):
     lid = request.user.lid
-    content = {'lid': lid,}
-    return render(request, 'users/account.html', content)
+    content = {
+        "lid": lid,
+        "stand": Stand.objects.get(owner_id=lid.id).amount,
+        'declasFILED': Decla.objects.filter(owner_id=lid.id),
+        'declasPRESENT': presentLid(lid),
+    }
+    return render(request, "users/account.html", content)
 
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def editAccount(request):
     lid = request.user.lid
     form = LidForm(instance=lid)
-    content = {'form': form}
-    if request.method == 'POST':
+    content = {"form": form}
+    if request.method == "POST":
         form = LidForm(request.POST, request.FILES, instance=lid)
         if form.is_valid():
             form.save()
-            return redirect('account')
+            return redirect("account")
+    content["stand"] = Stand.objects.get(owner_id=request.user.lid.id).amount
+    return render(request, "users/leden-form.html", content)
 
-    return render(request, 'users/leden-form.html', content)
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, "home.html")
+
+
 def fakePage(request):
-    return render(request, 'main-page.html')
+    return render(request, "main-page.html")
+
 
 # def showCV(request, pk):
 #     lid = Lid.objects.get(id=pk)

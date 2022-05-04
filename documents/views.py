@@ -33,7 +33,7 @@ def addDocument(request):
                     request, 'an error occurred while creating document')
                 return redirect('documents')
         else:
-            messages.error(request, 'CV upload has to be a a pdf')
+            messages.error(request, 'Document upload has to be a a pdf')
             return redirect('documents')
     return render(request, 'documents/document-form.html', content)
 

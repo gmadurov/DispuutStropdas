@@ -11,6 +11,8 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.conf import settings
 
+from finance.models import Stand
+
 
 from .models import Lid
 
@@ -19,6 +21,7 @@ def verti():
     return len(Lid.objects.filter(lichting=datetime.today().year))+1
 
 
+    
 def createLid(sender, instance, created, **kwargs):
     if created:
         user = instance
@@ -30,6 +33,7 @@ def createLid(sender, instance, created, **kwargs):
             vertical=verti(),
             id = datetime.today().year*10 + verti()-1,
         )
+        Stand.objects.create(owner = lid,amount = 0)
     else:
         user = instance
         lid = user.lid

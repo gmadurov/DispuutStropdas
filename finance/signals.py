@@ -19,11 +19,11 @@ def updateStand(sender, instance, **kwargs):
         stand = Stand.objects.get(owner_id=lid.id)
         amount_declared = 0
         for decla in declaS:
-            amount_declared += decla.total
+            amount_declared += round(decla.total,2)
         # print(lid, amount_declared)
         amount_paid = 0
         for decla in declas:
-            if not decla.event.summary == "Borrel":
+            if decla.event.summary != "Borrel":
                 try:
                     amount_pp = round(decla.total / len(decla.present.all()), 2)
                 except:
@@ -31,7 +31,9 @@ def updateStand(sender, instance, **kwargs):
                 for Present in decla.present.all():
                     if lid.id == Present.id:
                         amount_paid += amount_pp
-        stand.amount = amount_declared - amount_paid
+            # elif lid.id == 0:
+            #     amount_paid += round(decla.total,2)
+        stand.amount = round(amount_declared - amount_paid,2)
         stand.save()
 
 

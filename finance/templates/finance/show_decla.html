@@ -1,0 +1,29 @@
+{% extends 'main.html' %} {% block content%}
+<!-- Main Section -->
+<main class="columns is-centered">
+  <div class="column is-one-third">
+    <div class="table is-bordered is-striped is-narrow is-hoverable is-centered is-three-forths">
+      <div class="card" style="background-color:red; color: white;"><b>Deze decla kan niet worden gewijzigd</b></br></div>
+      <form class="form" method="POST" enctype="multipart/form-data">
+        <table style="width: 100%; border: 1px solid black">
+          {% for field in form %}
+          {% if field.label != 'Present'%}
+          <!-- Input:{{field.label}} -->
+          <label for="formInput#text">{{field.label}}: </label>
+          {{field}}
+          {%else %}
+          <label for="formInput#text">{{field.label}}: </label>
+          {{field}}
+          </br>
+          {% endif%}
+          {% endfor %}</tr>
+        </table>
+
+
+    </div>
+    <a class="button" href="{{request.GET.next}}"><i class="im im-angle-left">Terug</i></a>
+    </form>
+  </div>
+  </div>
+</main>
+{% endblock content%}

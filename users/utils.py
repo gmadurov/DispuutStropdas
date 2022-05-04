@@ -1,4 +1,6 @@
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+
+from finance.models import Decla
 from .models import Lid
 from django.db.models import Q
 
@@ -36,3 +38,12 @@ def paginateLeden(request, leden, results):
     custom_range = range(leftIndex, rightIndex)
 
     return custom_range, leden
+
+
+def presentLid(lid):
+    declas = [ ]
+    for decla in Decla.objects.all():
+        for leden in decla.present.all():
+            if leden.id == lid.id:
+                declas.append(decla)
+    return declas

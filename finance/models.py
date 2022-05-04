@@ -46,7 +46,7 @@ class Decla(models.Model):
     @property
     def imageURL(self):
         try:
-            url = self.lid_image.url
+            url = self.receipt.url
         except:
             url = ""
         return url
