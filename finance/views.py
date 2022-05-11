@@ -30,16 +30,16 @@ def editDecla(request, pk):
     if request.method == "POST":
         form = DeclaForm(request.POST, request.FILES,instance= decla)
         if form.is_valid():
-            print('SSSSUUUBBBMMMIIITTTTEEEDDD')
+            # print('SSSSUUUBBBMMMIIITTTTEEEDDD')
             decla = form.save(commit=False)
             # "taken out because the owner is the one who 
             # creates it to avoid problems when edditing from sennate"
             # decla.owner = request.user.lid
             decla.save()
             messages.info(request, "Decla was created")
-            return redirect("agenda")
-        else:
-            print('save failed####################')
+            return redirect(request.GET["next"] if "next" in request.GET else "agenda")
+        # else:
+        #     print('save failed####################')
     context = {
         "form": form,
         "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,
@@ -52,14 +52,21 @@ def deleteDecla(request, pk):
     if request.method == "POST":
         decla.delete()
         messages.info(request, 'Decla deleted')
-        return redirect('account')
-    content = {'object': decla}
+        return redirect(request.GET["next"] if "next" in request.GET else "agenda")
+    content = {'object': decla, "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,}
     return render(request, 'delete-template.html', content)
 
 
 def showDecla(request, pk):
     decla = Decla.objects.get(id = pk)
     form = DeclaForm(instance= decla) 
-    content = {'form': form}
+    content = {'form': form, "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,}
     return render(request, 'finance/show_decla.html', content)
+
+
+def verwerkenDecla(request):
+    declas = Decla.objects.all()
+    # form = DeclaForm(instance= decla) 
+    content = {'declas': declas, "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,}
+    return render(request, 'finance/verwerken_decla.html', content)
 

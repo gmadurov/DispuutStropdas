@@ -2,6 +2,7 @@ from multiprocessing import context
 from django.shortcuts import redirect, render
 
 from documents.forms import DocumentForm
+from finance.models import Stand
 
 from .models import Document
 from django.contrib import messages
@@ -12,7 +13,7 @@ from django.db.models import Q
 # Create your views here.
 def addDocument(request):
     form = DocumentForm()
-    content = {'form': form}
+    content = {'form': form, "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,}
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
         condi = (len(request.FILES) == 0)
@@ -41,7 +42,7 @@ def addDocument(request):
 def editDocument(request, pk):
     document = Document.objects.get(id=pk)
     form = DocumentForm(instance=document)
-    content = {'form': form}
+    content = {'form': form, "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,}
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES, instance=document)
         condi = (len(request.FILES) == 0)
@@ -73,23 +74,23 @@ def deleteDocument(request, pk):
         document.delete()
         messages.info(request, 'Document deleted')
         return redirect('Documents')
-    content = {'object': document}
+    content = {'object': document, "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,}
     return render(request, 'delete-template.html', content)
 
 
 def showDocument(request, pk): 
     document = Document.objects.get(id= pk)
-    content = {'document': document}
+    content = {'document': document, "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,}
     return render(request,'documents/document.html', content)
 
 def showDocumentsPerYear(request, year):
     documents = Document.objects.filter(senate_year__exact=year)
     years = [ doc.senate_year for doc in Document.objects.all()]
-    content = {'documents': documents, 'years': years}
+    content = {'documents': documents, 'years': years, "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,}
     return render(request,'documents/documents.html', content)
 
 def showDocuments(request):
     documents = Document.objects.all()
     years = [ doc.senate_year for doc in documents]
-    content = {'documents': documents, 'years': years}
+    content = {'documents': documents, 'years': years, "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,}
     return render(request,'documents/documents.html', content)

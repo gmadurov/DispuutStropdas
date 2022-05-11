@@ -20,3 +20,8 @@ def future_events(date):
         Q(start_date__gte= date)| Q(end_date__gte=date)
     )
     return fut_events
+def past_events(date):
+    past_events = Event.objects.distinct().filter(
+        Q(start_date__lte= date)| Q(end_date__lte=date)
+    )
+    return past_events

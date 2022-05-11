@@ -9,7 +9,7 @@
     <div class="column --1of3">
       <div class="card text-center">
         <div class="card__body">
-          <a class="tag tag--pill tag--main settings__btn" href="{% url 'edit-account' %}?next=/account"><i
+          <a class="tag tag--pill tag--main settings__btn" href="{% url 'edit-account' %}?next={% url 'account' %}"><i
               class="im im-edit"></i>
             Edit</a>
           <img class="avatar avatar--xl dev__avatar" src="{{lid.imageURL}}" />
@@ -29,10 +29,10 @@
           {%for decla in declasFILED %}
           <div class="card" style="padding:10px;">
             <div class="card__body">
-              <a class="tag tag--pill tag--main settings__btn" href="{% url 'editDecla' decla.id %}?next=/account"><i
+              <a class="tag tag--pill tag--main settings__btn" href="{% url 'editDecla' decla.id %}?next={% url 'account' %}"><i
                   class="im im-edit">Edit</i>
               </a>
-              <a class="tag tag--pill tag--main settings__btn" href="{% url 'deleteDecla' decla.id %}?next=/account"><i
+              <a class="tag tag--pill tag--main settings__btn" href="{% url 'deleteDecla' decla.id %}?next={% url 'account' %}"><i
                   class="im im-edit">Delete</i>
               </a>
               <p class="dev__title">
@@ -51,7 +51,7 @@
           {%for decla in declasPRESENT %}
           <div class="card" style="padding:10px;">
             <div class="card__body">
-              <a class="tag tag--pill tag--main settings__btn" href="{% url 'showDecla' decla.id %}?next=/account/"><i
+              <a class="tag tag--pill tag--main settings__btn" href="{% url 'showDecla' decla.id %}?next={% url 'account' %}"><i
                   class="im im-edit">Toon</i>
               </a>
               <p class="dev__title">

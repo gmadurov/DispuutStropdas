@@ -55,3 +55,11 @@ deactivate
 
 pipenv --rm
 ```
+
+
+```
+/usr/local/bin/heroku login
+/usr/local/bin/heroku git:remote -a stropdas
+/usr/local/bin/heroku git push heroku main
+
+```

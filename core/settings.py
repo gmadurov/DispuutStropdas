@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 if os.getcwd() == '/home/gusmadvol/WebDev/DispuutStropdas':
     from environment.env import setENV, setURL
     # set to false before uploading
-    setURL(False)
+    setURL()
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = True
 else:

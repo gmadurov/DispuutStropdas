@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
+
+from agenda.models import AgendaClient
 from .models import Lid
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -12,6 +14,7 @@ from finance.models import Decla, Stand
 
 
 def loginUser(request):
+    print(User.objects.all())
     page = "login"
 
     if request.user.is_authenticated:
@@ -54,6 +57,7 @@ def leden(request):
         "leden": ledenlist,
         "search_query": search_query,
         "custom_range": custom_range,
+        "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,
     }
     return redirect("agenda")
     return render(request, "users/leden.html", content)
@@ -62,7 +66,10 @@ def leden(request):
 @login_required(login_url="login")
 def userLid(request, pk):
     lid = Lid.objects.get(id=pk)
-    content = {"lid": lid}
+    content = {
+        "lid": lid,
+        "stand": Stand.objects.get(owner_id=lid.id).amount,
+    }
     return render(request, "users/user-profile.html", content)
 
 
@@ -72,8 +79,8 @@ def userAccount(request):
     content = {
         "lid": lid,
         "stand": Stand.objects.get(owner_id=lid.id).amount,
-        'declasFILED': Decla.objects.filter(owner_id=lid.id),
-        'declasPRESENT': presentLid(lid),
+        "declasFILED": Decla.objects.filter(owner_id=lid.id),
+        "declasPRESENT": presentLid(lid),
     }
     return render(request, "users/account.html", content)
 
@@ -104,3 +111,57 @@ def fakePage(request):
 #     lid = Lid.objects.get(id=pk)
 #     content = {'CV': None, 'lid': lid}
 #     return render(request, 'users/document.html', content)
+
+
+# def loadDATA(request):
+#     # print(User.objects.all())
+#     # return render(request, "home.html")
+#     import pandas as pd
+
+#     data = pd.read_excel("environment/das info.xlsx", sheet_name="Leden")
+#     for user in data.iterrows():
+#         user = user[1]
+#         AC = AgendaClient.objects.get(name="nextID")
+#         lichting = AgendaClient.objects.get(name="lichting")
+#         vertical = AgendaClient.objects.get(name="vertical")
+#         initials = AgendaClient.objects.get(name="initials")
+#         name = AgendaClient.objects.get(name="name")
+#         initials.json = user.initials
+#         name.json = user.name
+#         if user["jaar"] >= 90:
+#             AC.json = 19 * 1000 + user["jaar"] * 10 + user["vertical"]
+#             vertical.json = user.vertical
+#             lichting.json = 19 * 100 + user["jaar"]
+#         else:
+#             AC.json = 20 * 1000 + user["jaar"] * 10 + user["vertical"]
+#             vertical.json = user.vertical
+#             lichting.json = 20 * 100 + user["jaar"]
+#         AC.save()
+#         lichting.save()
+#         vertical.save()
+#         initials.save()
+#         name.save()
+#         user = User.objects.create_user(username=user.username, password=user.password)
+#     return render(request, "home.html")
+
+
+def loadDATA(request):
+    # print(User.objects.all())
+    # return render(request, "home.html")
+    import pandas as pd
+    days = ['Maandag', 'Dinsdag', 'Woensdag', 'Donderdag','Vrijdag', 'Zondag'], ['Maa', 'Din', 'Woe', 'Don','Vri', 'Zat', 'Zon'],['Ma', 'Di', 'Wo', 'Do','Vr','Za',  'Zo'], ["jan", "feb", "mrt", "apr", "mei", "juni", "juli", "aug", "sep", "okt", "nov", "dec"]
+    data = pd.read_excel("environment/das info.xlsx", sheet_name="Calendar")
+    for event in data.iterrows():
+        event = event[1]
+        lis = (str(event.Datum).split(" "))
+        if len(lis)>3:
+            pass
+        else:
+            pass
+
+            
+        # print(event)
+
+    return render(request, "home.html")
+
+

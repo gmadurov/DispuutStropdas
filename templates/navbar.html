@@ -1,26 +1,28 @@
-{% load static %}
+{% load static %}{% load auth_tags %}
 <!-- Header Section -->
 <div class="menu" style="background-color: #fff;">
-  
+
   <a href="{% url 'home' %}" class="header__logo">
-    <img
-      src="{% static 'images/blazoen.png'%}"
-      alt="Home"
-      style="width: 50px;height 100px;"
-    />
+    <img src="{% static 'images/blazoen.png'%}" alt="Home" style="width: 50px;height 100px;" />
   </a>
   {% if request.user.is_authenticated %}
 
-  
+
   {% comment %} <a href="{%  url 'link'  %}">name</a> {% endcomment %}
   <a href="{%  url 'agenda'  %}">Agenda</a>
   <a href="{%  url 'DSANI'  %}">DSANI</a>
   <a href="{%  url 'try_out'  %}">Try out</a>
   <a href="{%  url 'documents'  %}">Documents</a>
   <a href="{%  url 'fileDecla'  %}">Decla</a>
-  
-  
+
+
   <a href="{%  url 'account'  %}">My Account (€{{stand}})</a>
+  {%if request.user|has_group:"Fiscus" %}
+  <a href="{% url 'verwerkenDecla'%}">Verwerkt Declas</a>
+  {%endif%}
+  {%if request.user.is_superuser %}
+  <a href="/admin/">Admin</a>
+  {%endif%}
   <a href="{% url 'logout' %}">Logout</a>
   {% else %}
   <a href="{% url 'login' %}">Login/Sign Up</a>
@@ -35,7 +37,8 @@
   {% endfor %} {% endif %}
 </div>
 <div class="columns">
-  <div class="column is-2" >
-  </article>
-</div></div>
+  <div class="column is-2">
+    </article>
+  </div>
+</div>
 <hr />

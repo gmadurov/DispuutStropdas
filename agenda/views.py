@@ -9,7 +9,7 @@ from users.models import Lid
 from .forms import EventForm, NIEventForm
 from .models import Event, NIEvent
 from .signals import get_service
-from .utils import future_events
+from .utils import future_events, past_events
 
 output = ""
 
@@ -22,9 +22,13 @@ def print(object):
 # Create your views here.
 @login_required(login_url="fakePage")
 def agenda(request):
-    evns = future_events(
+    FUevns = future_events(
         (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
     )
+    PAevns = past_events(
+        (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
+    )
+
     lid = request.user.lid
     try:
         pass
@@ -35,7 +39,8 @@ def agenda(request):
         pass
 
     content = {
-        "events": evns,
+        "FUevents": FUevns,
+        "PAevents": PAevns,
         "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,
     }
     return render(request, "agenda/agenda.html", content)
@@ -150,5 +155,5 @@ def edit_dsani(request, pk):
 
 
 def try_out(request):
-    context = {}
+    context = { "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,}
     return render(request, "try_out.html", context)

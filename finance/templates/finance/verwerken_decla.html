@@ -1,0 +1,72 @@
+{% extends 'main.html'%}{% load auth_tags %}
+{% block content%}
+<div class="columns">
+    <div class="column is-offset-2 is-8">
+        <div class="table is-bordered is-striped is-narrow is-hoverable is-centered is-three-forths">
+
+            <table style="width: 100%; border: 1px solid black">
+                <th>Event</th>
+                <th>Lid</th>
+                <th>Total</th>
+                <th>Verwerkt</th>
+                {% if request.user|has_group:"Senate" %}
+                <th>Actie</th>
+                {% endif %}
+                {% for decla in declas %}
+                <tr>
+                    <td style="text-align: center">
+                        {{decla.event.start_date|default_if_none:""}}
+                    </td>
+                    {% if decla.event.summary == 'Wedstrijd' %}
+                    <td style="text-align: center; background-color: red">
+                        {{decla.event.summary}}
+                    </td>
+                    {% elif decla.event.summary == 'Dispuutsactiviteit'%}
+                    <td style="text-align: center; background-color: green; color: white">
+                        {{decla.event.summary}}
+                    </td>
+                    {% elif decla.event.summary == 'Borrel'%}
+                    <td style="text-align: center; background-color: pink; color: black">
+                        {{decla.event.summary}}
+                    </td>
+                    {% elif decla.event.summary == 'Dispuutsverjaardag'%}
+                    <td style="text-align: center; background-color: #bbd334">
+                        {{decla.event.summary}}
+                    </td>
+                    {% elif decla.event.summary == 'Clubactiviteit'%}
+                    <td style="text-align: center; background-color: yellow">
+                        {{decla.event.summary}}
+                    </td>
+                    {% elif decla.event.summary == 'Activiteit'%}
+                    <td style="
+              text-align: center;
+              background-color: rgba(35, 32, 209, 0.685);
+              color:white;
+            ">
+                        {{decla.event.summary}}
+                    </td>
+                    {%else %}
+                    <td style="text-align: center">
+                        {{decla.event.summary|default_if_none:""}}
+                    </td>
+                    {% endif %}
+                    <td style="text-align: center">
+                        {{decla.total}}
+                    </td>
+                    <td style="text-align: center">
+                        {{decla.verwerkt}}
+                    </td>
+                    {% if request.user|has_group:"Fiscus" %}
+                    <td style="text-align: center">
+                        <a href="{% url 'editDecla' decla.id %}?next={% url 'verwerkenDecla'%}">Edit</a>
+                        <a href="{% url 'deleteDecla' decla.id %}?next={% url 'verwerkenDecla'%}">Delete</a>
+                    </td>
+                    {% endif %}
+
+                </tr>
+                {%endfor%}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content%}
