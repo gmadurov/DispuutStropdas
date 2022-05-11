@@ -8,7 +8,7 @@ class DeclaForm(ModelForm):
     class Meta:
         model = Decla
         fields = "__all__"
-        exclude = ["owner", "id", "created"]
+        exclude = ["owner", "id", "created",'senate_year']
         widgets = {
             "senate_year": NumberInput(),
             "present": CheckboxSelectMultiple(),

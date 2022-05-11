@@ -44,6 +44,7 @@ def createLid(sender, instance, created, **kwargs):
         user = instance
         lid = user.lid
         lid.name = user.first_name + user.last_name
+        # Stand.objects.create(owner = lid,amount = 0)
         if user.email:
             lid.email = user.email
         subject = " welcome to "
@@ -81,6 +82,6 @@ def updateUser(sender, instance, created, **kwargs):
         return
 
 
-# post_save.connect(createLid, sender=User)
-# post_save.connect(updateUser, sender=Lid)
-# post_delete.connect(deleteUser, sender=Lid)
+post_save.connect(createLid, sender=User)
+post_save.connect(updateUser, sender=Lid)
+post_delete.connect(deleteUser, sender=Lid)

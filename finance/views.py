@@ -59,8 +59,8 @@ def deleteDecla(request, pk):
 
 def showDecla(request, pk):
     decla = Decla.objects.get(id = pk)
-    form = DeclaForm(instance= decla) 
-    content = {'form': form, "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,}
+    # form = DeclaForm(instance= decla) 
+    content = {'form': decla, "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,}
     return render(request, 'finance/show_decla.html', content)
 
 

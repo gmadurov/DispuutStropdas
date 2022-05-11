@@ -34,7 +34,7 @@ else:
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'stropdas.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'stropdas.herokuapp.com','stropdas2.herokuapp.com']
 
 # Application definition
 
