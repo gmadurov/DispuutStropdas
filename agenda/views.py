@@ -11,14 +11,6 @@ from .models import Event, NIEvent
 from .signals import get_service
 from .utils import future_events, past_events
 
-output = ""
-
-
-def print(object):
-    global output
-    output += str(object)
-
-
 # Create your views here.
 @login_required(login_url="fakePage")
 def agenda(request):

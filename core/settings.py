@@ -22,10 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.getcwd() == '/home/gusmadvol/WebDev/DispuutStropdas':
+path = '/home/gusmadvol/WebDev/DispuutStropdas'
+if os.getcwd() == path:
     from environment.env import setENV, setURL
     # set to false before uploading
-    setURL()
+    setURL(False)
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = True
 else:
@@ -106,24 +107,26 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+if  os.getcwd() == path:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / 'db.sqlite3',
+#         }
 #     }
-# }
-#start
-host, port, name, user, password = init_DB()
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': name,
-        'USER': user,
-        'PASSWORD': password,
-        'HOST': host,
-        'PORT': port,
+#     #start
+# else:
+    host, port, name, user, password = init_DB()
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': name,
+            'USER': user,
+            'PASSWORD': password,
+            'HOST': host,
+            'PORT': port,
+        }
     }
-}
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
