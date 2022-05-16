@@ -30,7 +30,7 @@ if os.getcwd() == path:
     # set to false before uploading
     setURL(True)
     # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = True
+    DEBUG = False# True
 else:
     DEBUG = True
 
@@ -109,7 +109,7 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-if     DEBUG:
+if not DEBUG:
         DATABASES = {
             'default': {
                 'ENGINE': 'django.db.backends.sqlite3',
