@@ -3,26 +3,43 @@
 <main class="columns is-centered">
   <div class="column is-one-third">
     <div class="table is-bordered is-striped is-narrow is-hoverable is-centered is-three-forths">
-      <div class="card" style="background-color:red; color: white;"><b>Deze decla kan niet worden gewijzigd</b></br></div>
-      <form class="form" method="POST" enctype="multipart/form-data">
+      <div class="card" style="background-color:red; color: white;"><b>Deze decla kan niet worden gewijzigd</b></br>
+      </div>
+      <div>
         <table style="width: 100%; border: 1px solid black">
-          {% for field in form %}
-          {% if field.label != 'Present'%}
-          <!-- Input:{{field.label}} -->
-          <label for="formInput#text">{{field.label}}: </label>
-          {{field}}
-          {%else %}
-          <label for="formInput#text">{{field.label}}: </label>
-          {{field}}
-          </br>
-          {% endif%}
-          {% endfor %}</tr>
+          <tr>
+            <label for="formInput#text">Eigenaar: </label>{{decla.owner}}
+          </tr></br>
+          <tr>
+            <label for="formInput#text">Evenement: </label>{{decla.event}}
+          </tr></br>
+          <tr>
+            <label for="formInput#text">Content: </label> {{decla.content}}
+          </tr></br>
+          <tr>
+            <label for="formInput#text">Total: €</label>{{decla.total}}
+          </tr></br>
+          <tr>
+            <label for="formInput#text">Aanwezig: </label>
+            {% for lid in decla.present.all%}
+            {{lid.initials}} </br>
+            {%endfor%}
+          </tr>
+          <tr>
+            <label for="formInput#text">Bon: </label><a href="{{decla.receipt.url}}">Bon URL</a>
+          </tr></br>
+          <tr>
+            <label for="formInput#text">Hoeweelheid reunisten: </label>{{decla.reunist}}
+          </tr></br>
+          <tr>
+            <label for="formInput#text">Hoeweelheid KMTers: </label>{{decla.kmters}}
+          </tr></br>
         </table>
 
 
+      </div>
+      <a class="button" href="{{request.GET.next}}"><i class="im im-angle-left">Terug</i></a>
     </div>
-    <a class="button" href="{{request.GET.next}}"><i class="im im-angle-left">Terug</i></a>
-    </form>
   </div>
   </div>
 </main>

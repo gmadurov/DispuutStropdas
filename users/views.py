@@ -14,13 +14,12 @@ from finance.models import Decla, Stand
 
 
 def loginUser(request):
-    print(User.objects.all())
-    page = "login"
-
+    # print(User.objects.all())
+    # page = "login"
     if request.user.is_authenticated:
         return redirect("agenda")
     if request.method == "POST":
-        username = request.POST["username"].lower()
+        username = request.POST["username"]#.lower()
         password = request.POST["password"]
         try:
             user = User.objects.get(username=username)
