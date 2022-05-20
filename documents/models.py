@@ -18,7 +18,7 @@ class Document(models.Model):
 
     owner = models.ForeignKey(Lid, on_delete=models.CASCADE,  null=True, blank=True)
     name = models.CharField(max_length=30)
-    senate_year = models.IntegerField(senate_jaar())
+    senate_year = models.IntegerField(default = senate_jaar())
     file = models.FileField(
         upload_to='documents/', null=True, blank=True)
     show = models.BooleanField(default=True)

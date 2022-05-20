@@ -60,7 +60,7 @@ def deleteDecla(request, pk):
 
 def showDecla(request, pk):
     decla = Decla.objects.get(id=pk)
-    form = DeclaForm(instance= decla)
+    form = DeclaForm(instance=decla)
     content = {
         "decla": decla,
         "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,
@@ -76,3 +76,11 @@ def verwerkenDecla(request):
         "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,
     }
     return render(request, "finance/verwerken_decla.html", content)
+
+
+def exportDeclas(request):
+    declas = Decla.export()
+    content = {"object": declas[1]}
+
+    # return declas[0]
+    return render(request, "display.html", content)

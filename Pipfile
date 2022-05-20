@@ -40,6 +40,7 @@ protobuf = "==3.19.4"
 boto3 = "*"
 djangorestframework = "*"
 djangorestframework-simplejwt = "*"
+pandas = "*"
 
 [dev-packages]
 yapf = "*"

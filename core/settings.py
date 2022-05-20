@@ -28,11 +28,11 @@ if os.getcwd() == path:
     from environment.env import setENV, setURL
 
     # set to false before uploading
-    setURL(True)
+    setURL()
     # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = False# True
-else:
     DEBUG = True
+else:
+    DEBUG = False
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
@@ -109,7 +109,7 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-if not DEBUG:
+if  DEBUG:
         DATABASES = {
             'default': {
                 'ENGINE': 'django.db.backends.sqlite3',
@@ -154,9 +154,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en-us" # "nl-nl"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Amsterdam"
 
 USE_I18N = True
 

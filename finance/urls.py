@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path('decla/', views.fileDecla, name = 'fileDecla'),
+    path('declas-export/', views.exportDeclas, name = 'exportDeclas'),
     path('declas-verwerken/', views.verwerkenDecla, name = 'verwerkenDecla'),
     path('edit-decla/<str:pk>/', views.editDecla, name = 'editDecla'),
     path('delete-decla/<str:pk>/', views.deleteDecla, name = 'deleteDecla'),

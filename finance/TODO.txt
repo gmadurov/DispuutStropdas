@@ -1,2 +1,4 @@
 1. distribution of costs for a borrel
-2. beer paal
+2. beer paal(KIJKEN OP DE SHEET LEX STUURT)
+actual amount paid per event in the afgelopen event lijst
+if all declas are verwerkt and a stand amount is below 10€ send email 

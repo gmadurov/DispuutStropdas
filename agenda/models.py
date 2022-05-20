@@ -27,6 +27,11 @@ class Event(models.Model):
         ("Wedstrijd", "Wedstrijd"),
         ("Dispuutsactiviteit", "Dispuutsactiviteit"),
         ("Dispuutsverjaardag", "Dispuutsverjaardag"),
+        ("Dispuutsavonds", "Dispuutsavonds"),
+        ("AdministratifActivitied", "AdministratifActivitied"),
+        ("Bier", "Bier"),
+
+
     )
     summary = models.CharField(max_length=50, choices=EVENT_CHOICES)
     description = models.CharField(max_length=50, null=True, blank=True)

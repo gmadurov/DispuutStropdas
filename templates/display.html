@@ -1,0 +1,10 @@
+{% extends 'main.html'%} {% load auth_tags %}{% block content%}
+<main>
+  <div class="columns is-centered">
+    <div class="columns">
+
+      {{object | safe}}
+    </div>
+  </div>
+</main>
+{% endblock content%}

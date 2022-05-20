@@ -19,6 +19,7 @@
   <a href="{%  url 'account'  %}">My Account (€{{stand}})</a>
   {%if request.user|has_group:"Fiscus" %}
   <a href="{% url 'verwerkenDecla'%}">Verwerkt Declas</a>
+  <a href="{% url 'exportDeclas'%}">Export Declas</a>
   {%endif%}
   {%if request.user.is_superuser %}
   <a href="/admin/">Admin</a>
