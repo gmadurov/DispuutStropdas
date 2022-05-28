@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
-from pickle import TRUE
 
 from .utils import init_DB
 
@@ -31,8 +30,10 @@ if os.getcwd() == path:
     setURL()
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = True
+    LOCAL = True
 else:
     DEBUG = False
+    LOCAL = False
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
@@ -109,14 +110,14 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-if  DEBUG:
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.sqlite3',
-                'NAME': BASE_DIR / 'db.sqlite3',
-            }
+if LOCAL:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         }
-        #start
+    }
+    # start
 else:
     host, port, name, user, password = init_DB()
     DATABASES = {
@@ -154,7 +155,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = "en-us" # "nl-nl"
+LANGUAGE_CODE = "en-us"  # "nl-nl"
 
 TIME_ZONE = "Europe/Amsterdam"
 

@@ -4,7 +4,7 @@ from users.models import Lid
 
 def recalculate_all_Stands():
     declas = Decla.objects.all()
-    leden = Lid.objects.all()
+    leden = Lid.objects.filter(active = True)
 
 
     # for each lid fist calculate how much the have declared and then how much has been paid for them 

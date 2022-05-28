@@ -19,13 +19,11 @@ EVENT_CHOICES = (
     ("Bier", "Bier"),
 )
 
-
-
-def updateStand(sender, instance, **kwargs):
+def StandUpdate():
     """recalculates the stand of each member every time a new decla has been filled in"""
     # TODO: find a way to differentiate between senaat years
     declas = Decla.objects.all()
-    leden = Lid.objects.all()
+    leden = Lid.objects.filter(active = True)
     # for each lid fist calculate how much the have declared and then how much has been paid for them
     for lid in leden:
         declaS = Decla.objects.filter(owner_id=lid.id)
@@ -59,4 +57,8 @@ def updateStand(sender, instance, **kwargs):
         stand.save()
 
 
+def updateStand(sender, instance, **kwargs):
+    StandUpdate()
+
 post_save.connect(updateStand, sender=Decla)
+post_delete.connect(updateStand, sender=Decla)

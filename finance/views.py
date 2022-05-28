@@ -1,12 +1,13 @@
-from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
 
 from .forms import DeclaForm
 from .models import Decla, Stand
 
 # Create your views here.
 
-
+@login_required(login_url="login")
 def fileDecla(request):
     form = DeclaForm()
     if request.method == "POST":
@@ -23,7 +24,7 @@ def fileDecla(request):
     }
     return render(request, "finance/decla_form.html", context)
 
-
+@login_required(login_url="login")
 def editDecla(request, pk):
     decla = Decla.objects.get(id=pk)
     form = DeclaForm(instance=decla)
@@ -44,7 +45,7 @@ def editDecla(request, pk):
     }
     return render(request, "finance/decla_form.html", context)
 
-
+@login_required(login_url="login")
 def deleteDecla(request, pk):
     decla = Decla.objects.get(id=pk)
     if request.method == "POST":
@@ -57,7 +58,7 @@ def deleteDecla(request, pk):
     }
     return render(request, "delete-template.html", content)
 
-
+@login_required(login_url="login")
 def showDecla(request, pk):
     decla = Decla.objects.get(id=pk)
     form = DeclaForm(instance=decla)
@@ -67,7 +68,7 @@ def showDecla(request, pk):
     }
     return render(request, "finance/show_decla.html", content)
 
-
+@login_required(login_url="login")
 def verwerkenDecla(request):
     declas = Decla.objects.all()
     # form = DeclaForm(instance= decla)

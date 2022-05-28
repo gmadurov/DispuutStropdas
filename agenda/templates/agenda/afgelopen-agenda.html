@@ -2,9 +2,10 @@
 {% block content%}
 <main>
   <div class="columns is-centered">
-    <div class="column is-centered is-8">
-      <div class="table is-bordered is-striped is-narrow is-hoverable is-centered is-three-forths">
+    <div class="column is-8">
 
+      <div class="card table is-bordered is-striped is-narrow is-hoverable is-centered is-three-forths">
+        <div class="title" style="font-size:24px">Afgelopen Evenementen</div>
         <table style="width: 100%; border: 1px solid black">
           <th>Datum</th>
           <th>Activiteit</th>
@@ -80,9 +81,6 @@
       </div>
       <div class="columns is-centered">
         {% include 'pagination.html' with queryset=events custom_range=custom_range %}
-      </div>
-      <div class="columns is-centered">
-        <a href="{% url 'afgelopenAgenda'%}"> Afgelopen Evenementen</a>
       </div>
     </div>
   </div>

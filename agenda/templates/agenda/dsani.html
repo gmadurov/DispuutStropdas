@@ -7,12 +7,13 @@
         <th>Omschrijving</th>
         {% for lid in leden %}
         <th>{{lid.initials}}</th>
-        {%endfor%}
+        {% endfor %}
+        {% for event in events %}
         <tr>
-          {% for event in events %}
           <td style="text-align: center">{{event.start_date|date:"l j F"}}</td>
           <td style="text-align: center">{{event.description}}</td>
           {% for point in event.dsani_ev.all %}
+          {% if point.lid in leden %}
           <td class="myDIV" style="text-align: center">
             {% if point.note %}
             <div class="dropdown is-hoverable">
@@ -23,7 +24,8 @@
                 <div class="dropdown-content">
                   <div class="dropdown-item">
                     {% if request.user.lid == point.lid or request.user|has_group:"Senate"%}
-                    <a href="{% url 'edit-dsani' point.id %}">Edit</a>{% endif%}
+                    <a href="{% url 'edit-dsani' point.id %}">Edit</a>
+                    {% endif%}
                     <p>{{point.note}}</p>
                   </div>
                 </div>
@@ -31,18 +33,24 @@
             </div>
             {% else %}
             <span>
-              {% if request.user.lid == point.lid  or request.user|has_group:"Senate"%}
-              <a href="{% url 'edit-dsani' point.id %}">{{point.points}}</a> {% else %} <p>{{point.points}}</p>{%endif %}
+              {% if request.user.lid == point.lid or request.user|has_group:"Senate"%}
+              <a href="{% url 'edit-dsani' point.id %}">{{point.points}}</a>
+              {% else %}
+              <p>{{point.points}}</p>
+              {%endif%}
             </span>
             {%endif%}
           </td>
+          {%endif%}
           {%endfor%}
         </tr>
         {% endfor %}
       </table>
     </div>
   </div>
-  {% comment %} <div class="column"></div> {% endcomment %}
+</div>
+<div class="columns is-centered">
+  {% include 'pagination.html' with queryset=events custom_range=custom_range %}
 </div>
 
 {% endblock content%}

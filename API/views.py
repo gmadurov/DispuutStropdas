@@ -43,7 +43,7 @@ def getRoutes(request):
 @api_view(["GET"])
 # @permission_classes([IsAuthenticated])
 def getLeden(request):
-    leden = Lid.objects.all()
+    leden = Lid.objects.filter(active = True)
     serializer = LidSerializer(leden, many=True)
     return Response(serializer.data)
 

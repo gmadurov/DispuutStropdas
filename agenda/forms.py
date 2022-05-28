@@ -44,7 +44,7 @@ class EventForm(ModelForm):
 class NIEventForm(ModelForm):
     class Meta:
         model = NIEvent
-        fields = ["points", "note"]
+        fields = ["lid", "points", "note"]
         widgets = {
             "points": NumberInput(),
         }

@@ -1,0 +1,12 @@
+https://stackoverflow.com/questions/37754999/google-calendar-integration-with-django
+
+https://console.cloud.google.com/iam-admin/serviceaccounts/details/
+https://stackoverflow.com/questions/1555060/how-to-save-a-model-without-sending-a-signal
+
+create survice account and copy the data into the admin pannel 
+
+
+enable calendar api in google 
+
+add the calendar ID to the admin panel 
+add the service account to the people shared as admin (make cahnges to events) 

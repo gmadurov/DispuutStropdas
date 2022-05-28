@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path('agenda/', views.agenda, name = 'agenda'),
+    path('afgelopen-agenda/', views.afgelopenAgenda, name = 'afgelopenAgenda'),
     path('dsani/', views.dsani, name = 'DSANI'),
 
     path('tryout/', views.try_out, name = 'try_out'),

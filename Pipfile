@@ -41,6 +41,9 @@ boto3 = "*"
 djangorestframework = "*"
 djangorestframework-simplejwt = "*"
 pandas = "*"
+google-cloud = "*"
+google-cloud-storage = "*"
+oauth2client = "*"
 
 [dev-packages]
 yapf = "*"

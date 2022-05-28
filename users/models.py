@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 class Lid(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
-    initials = models.CharField(max_length=2, null=True, blank=True)
+    initials = models.CharField(max_length=4, null=True, blank=True)
     name = models.CharField(max_length=200, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     educations = models.CharField(max_length=200, null=True, blank=True)
@@ -23,11 +23,9 @@ class Lid(models.Model):
         default="images/leden/user-default.png",
     )
 
+    active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     id = models.IntegerField(default=0, primary_key=True, unique=True)
-    # id = models.UUIDField(
-    #     default=uuid.uuid4, unique=True, primary_key=True, editable=False
-    # )
 
     def __str__(self):
         return str(self.user.username)

@@ -4,6 +4,7 @@ from users.models import Lid
 
 # Create your models here.
 
+
 class AgendaClient(models.Model):
     # lid = models.OneToOneField(Lid, on_delete=models.CASCADE)
     # token = models.CharField(max_length=200, null=True, blank=True)
@@ -13,10 +14,11 @@ class AgendaClient(models.Model):
     # client_secret = models.CharField(max_length=200, null=True, blank=True)
     # scopes = models.CharField(max_length=2000, null=True, blank=True)
     # expiry = models.CharField(max_length=200, null=True, blank=True)
-    name = models.CharField(max_length=30,null=True, blank=True)
-    json = models.TextField(blank=True,null=True)
+    name = models.CharField(max_length=30, null=True, blank=True, unique=True)
+    json = models.TextField(blank=True, null=True)
+
     def __str__(self):
-      return str(self.name)
+        return str(self.name)
 
 
 class Event(models.Model):
@@ -30,8 +32,11 @@ class Event(models.Model):
         ("Dispuutsavonds", "Dispuutsavonds"),
         ("AdministratifActivitied", "AdministratifActivitied"),
         ("Bier", "Bier"),
-
-
+    )
+    BIJZONDERHEIDEN = (
+        ("Op Afmelding", "Op Afmelding"),
+        ("Op Aanmelding", "Op Aanmelding"),
+        (" ", " "),
     )
     summary = models.CharField(max_length=50, choices=EVENT_CHOICES)
     description = models.CharField(max_length=50, null=True, blank=True)
@@ -49,19 +54,24 @@ class Event(models.Model):
 
     # Datum	Activiteit	Kokers	Omschrijving	Kartrekkers	Bijzonderheden	Budget
     def __str__(self):
-        return str(self.description)+ ', '+ str(self.start_date)
+        return str(self.description) + ", " + str(self.start_date)
+
     class Meta:
-        ordering = ['start_date', 'start_time','-end_date']
+        ordering = ["start_date", "start_time", "-end_date"]
+
 
 class NIEvent(models.Model):
-    '''DSANI events links'''
-    event = models.ForeignKey(Event, on_delete= models.CASCADE, related_name='dsani_ev')
-    lid = models.ForeignKey(Lid, on_delete= models.CASCADE)
-    points = models.IntegerField()
-    note = models.CharField(max_length=200, null=True, blank=True)
+    """DSANI events links"""
+
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="dsani_ev")
+    lid = models.ForeignKey(Lid, on_delete=models.CASCADE)
+    points = models.IntegerField(default=0)
+    note = models.CharField(default="", max_length=200, null=True, blank=True)
+
     def __str__(self):
         if self.note:
-            return str(self.lid.initials)+ ', '+ str(self.note)
-        return str(self.lid.initials)+ ', '+ str(self.event.description)
+            return str(self.lid.initials) + ", " + str(self.note)
+        return str(self.lid.initials) + ", " + str(self.event.description)
+
     class Meta:
-        ordering = ['lid']
+        ordering = ["lid"]

@@ -9,7 +9,7 @@ from users.models import Lid
 from .forms import EventForm, NIEventForm
 from .models import Event, NIEvent
 from .signals import get_service
-from .utils import future_events, past_events
+from .utils import future_events, past_events, searchEvents, paginateEvents
 
 # Create your views here.
 @login_required(login_url="fakePage")
@@ -17,10 +17,8 @@ def agenda(request):
     FUevns = future_events(
         (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
     )
-    PAevns = past_events(
-        (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
-    )
-
+    FUevns, search_query = searchEvents(request)
+    custom_range, FUevns = paginateEvents(request, FUevns, 20, datetime.date.today())
     lid = request.user.lid
     try:
         pass
@@ -31,30 +29,51 @@ def agenda(request):
         pass
 
     content = {
-        "FUevents": FUevns,
-        "PAevents": PAevns,
+        "events": FUevns,
         "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,
+        "search_query": search_query,
+        "custom_range": custom_range,
     }
     return render(request, "agenda/agenda.html", content)
 
 
 @login_required(login_url="fakePage")
+def afgelopenAgenda(request):
+    evns = past_events((datetime.date.today() - datetime.timedelta(days=1)).isoformat())
+    evns, search_query = searchEvents(request)
+    custom_range, evns = paginateEvents(request, evns, 25)
+    lid = request.user.lid
+
+    content = {
+        "events": evns,
+        "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,
+        "search_query": search_query,
+        "custom_range": custom_range,
+    }
+    return render(request, "agenda/afgelopen-agenda.html", content)
+
+
+@login_required(login_url="fakePage")
 def dsani(request):
-    events = Event.objects.all()
-    ni_events = NIEvent.objects.all()
-    lid_NI = NIEvent.objects.filter(lid=request.user.lid)
-    dic_NI = {}
-    for ev in events:
-        dic_NI[ev] = NIEvent.objects.filter(lid=request.user.lid, event=ev)
-        # print(ev)
-        # print(dic_NI[ev])
-    leden = Lid.objects.all()
+    # ni_events = NIEvent.objects.all()
+    events = future_events(
+        (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
+    )
+    events, search_query = searchEvents(request)
+    custom_range, events = paginateEvents(request, events, 10, datetime.date.today())
+
+    leden = NIEvent.objects.filter(lid=request.user.lid)
+    # dic_NI = {}
+    # for ev in events:
+    #     dic_NI[ev] = NIEvent.objects.filter(lid=request.user.lid, event=ev)
+    leden = Lid.objects.filter(active=True)
+    # print(events)
     content = {
         "events": events,
-        "ni_events": ni_events,
         "leden": leden,
-        "dic_NI": dic_NI,
         "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,
+        "search_query": search_query,
+        "custom_range": custom_range,
     }
     return render(request, "agenda/dsani.html", content)
 
@@ -75,6 +94,8 @@ def create_event(request):
                 event.end_time = datetime.datetime.min.time()
             if not event.start_time:
                 event.start_time = datetime.datetime.min.time()
+            if event.end_date < event.start_date:
+                event.end_date, event.start_date = event.start_date, event.end_date
             event.save()
             messages.info(request, "Event was created")
             return redirect("agenda")
@@ -102,6 +123,8 @@ def edit_event(request, pk):
                 event.end_time = datetime.datetime.min.time()
             if not event.start_time:
                 event.start_time = datetime.datetime.min.time()
+            if event.end_date < event.start_date:
+                event.end_date, event.start_date = event.start_date, event.end_date
             event.save()
             messages.info(request, "Event was edited")
             return redirect("agenda")
@@ -146,6 +169,9 @@ def edit_dsani(request, pk):
     return render(request, "agenda/Neuk_index_form.html", context)
 
 
+@login_required(login_url="login")
 def try_out(request):
-    context = { "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,}
+    context = {
+        "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,
+    }
     return render(request, "try_out.html", context)

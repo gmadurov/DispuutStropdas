@@ -23,22 +23,6 @@ def senate_jaar():
 
 
 class Boekstuk(models.Model):
-    BOEKSTUK = (
-        ("Admin/Repri", "Admin/Repri"),
-        ("Borrels wijven", "Borrels wijven"),
-        ("Inkomende contributie", "Inkomende contributie"),
-        ("contributie", "contributie"),
-        ("Uitbetaling", "Uitbetaling"),
-        ("KMT", "KMT"),
-        ("Overige activiteiten", "Overige activiteiten"),
-        ("Vakantie", "Vakantie"),
-        ("Onvoorzien", "Onvoorzien"),
-        ("Aspirantenavond", "Aspirantenavond"),
-        ("Toernooien", "Toernooien"),
-        ("Afstuderen", "Afstuderen"),
-        ("Reünisten", "Reünisten"),
-        ("Eten", "Eten"),
-    )
     name = models.CharField(max_length=30)
 
     def __str__(self):
@@ -90,19 +74,31 @@ class Decla(models.Model):
         # response = FileResponse(content_type="application/vnd.ms-excel",file_to_stream=df)
         # response["Content-Disposition"] = 'attachment; filename="declas.xlsx"'
 
-        MT = (["Mutatie", "Totaal"] for lid in range(len(Lid.objects.all()) + 3))
+        MT = (
+            ["Mutatie", "Totaal"]
+            for lid in range(len(Lid.objects.filter(active=True)) + 3)
+        )
         rows = [
             [
                 "Datum",
                 "Boekstuk",
                 "Omshrijven",
             ]
-            + [item for sublist in MT for item in sublist ]
+            + [item for sublist in MT for item in sublist]
         ]
         leden = Lid.objects.all()
-        rows.append(['', '', 'Start Stand']+ [item for sublist in ([0,stand.initial_amount] for stand in Stand.objects.all()) for item in sublist])
-            
-        for index, decla in enumerate(Decla.objects.all()):
+        rows.append(
+            ["", "", "Start Stand"]
+            + [
+                item
+                for sublist in (
+                    [0, stand.initial_amount] for stand in Stand.objects.all()
+                )
+                for item in sublist
+            ]
+        )
+
+        for index, decla in enumerate(Decla.objects.filter(verwerkt=True)):
             cont = True
             row = [
                 decla.event.start_date,
@@ -110,9 +106,14 @@ class Decla(models.Model):
                 decla.content_ficus,
             ]
             present_leden = decla.present.all()
-            amount_pp = decla.total / (
-                len(present_leden) + int(decla.reunist) + int(decla.kmters)
-            )
+            try:
+                amount_pp = round(
+                    decla.total
+                    / (len(present_leden) + int(decla.reunist) + int(decla.kmters)),
+                    3,
+                )
+            except:
+                amount_pp = round(decla.total, 3)
             if decla.owner.id == 19900:
                 for i in range(4):
                     row.append(0)
@@ -146,14 +147,18 @@ class Decla(models.Model):
                 "Dispuut Stropdas",
                 " ",
                 " ",
-                "Kast",
-                " ",
-                "Bank",
-                " ",
-                "Dispuut",
-                " ",
+                # "Kast",
+                # " ",
+                # "Bank",
+                # " ",
+                # "Dispuut",
+                # " ",
             ]
-            + [lid.initials for lid in Lid.objects.all() for i in range(2)],
+            + [
+                lid.initials
+                for lid in Lid.objects.all()
+                for i in range(2)
+            ],
         )
         # # resp = HttpResponse(content_type="text/csv")
         # # resp["Content-Disposition"] = "attachment; filename=myFile.csv"

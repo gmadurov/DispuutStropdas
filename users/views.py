@@ -1,7 +1,8 @@
+from datetime import date, datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 
-from agenda.models import AgendaClient
+from agenda.models import AgendaClient, Event
 from .models import Lid
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -19,7 +20,7 @@ def loginUser(request):
     if request.user.is_authenticated:
         return redirect("agenda")
     if request.method == "POST":
-        username = request.POST["username"]#.lower()
+        username = request.POST["username"]  # .lower()
         password = request.POST["password"]
         try:
             user = User.objects.get(username=username)
@@ -51,7 +52,7 @@ def leden(request):
     # custom_range, lidlist = paginateLeden(request, lidlist, 3)
     search_query = 0
     custom_range = 0
-    ledenlist = Lid.objects.all()
+    ledenlist = Lid.objects.filter(active = True)
     content = {
         "leden": ledenlist,
         "search_query": search_query,
@@ -148,19 +149,116 @@ def loadDATA(request):
     # print(User.objects.all())
     # return render(request, "home.html")
     import pandas as pd
-    days = ['Maandag', 'Dinsdag', 'Woensdag', 'Donderdag','Vrijdag', 'Zondag'], ['Maa', 'Din', 'Woe', 'Don','Vri', 'Zat', 'Zon'],['Ma', 'Di', 'Wo', 'Do','Vr','Za',  'Zo'], ["jan", "feb", "mrt", "apr", "mei", "juni", "juli", "aug", "sep", "okt", "nov", "dec"]
+
+    days = [
+        "Maandag",
+        "Dinsdag",
+        "Woensdag",
+        "Donderdag",
+        "Vrijdag",
+        "Zondag",
+        "Maa",
+        "Din",
+        "Woe",
+        "Don",
+        "Vri",
+        "Zat",
+        "Zon",
+        "Ma",
+        "Di",
+        "Wo",
+        "Do",
+        "Vr",
+        "Za",
+        "Zo",
+    ]
+    months = [
+        "jan",
+        "feb",
+        "mrt",
+        "apr",
+        "mei",
+        "juni",
+        "juli",
+        "aug",
+        "sep",
+        "okt",
+        "nov",
+        "dec",
+    ]
+
     data = pd.read_excel("environment/das info.xlsx", sheet_name="Calendar")
     for event in data.iterrows():
         event = event[1]
-        lis = (str(event.Datum).split(" "))
-        if len(lis)>3:
-            pass
-        else:
-            pass
+        lis = str(event.Datum).split(" ")
+        summary = event.Activiteit
+        decription = event.Omschrijving
 
-            
+        if len(lis) == 3:
+            let, day, month = lis
+            try:
+                day = int(day)
+            except:
+                continue
+            if let in days:
+                for index, m in enumerate(months):
+                    if month.lower() == m:
+                        month = index + 1
+                        if month > 8:
+                            year = 2021
+                        else:
+                            year = 2022
+                        Event.objects.create(
+                            summary=summary,
+                            description=decription,
+                            start_date=date(year, month, int(day)),
+                            start_time=datetime.now(),
+                            end_time=datetime.now(),
+                        )
+                        # print(summary, decription, datetime(year, month, day), datetime.now(), datetime.now())
+                        break
+        elif len(lis) == 4 and lis[1] == "t/m":
+            start, tm, end, month = lis
+            for index, m in enumerate(months):
+                if month.lower() == m:
+                    month = index + 1
+                    if month > 8:
+                        year = 2021
+                    else:
+                        year = 2022
+                    # print(summary, decription, date(year, month, int(start)), datetime.now(), datetime.now())
+                    Event.objects.create(
+                        summary=summary,
+                        description=decription,
+                        start_date=date(year, month, int(start)),
+                        start_time=datetime.now(),
+                        end_time=datetime.now(),
+                        end_date=date(year, month, int(end)),
+                    )
+
+                    break
+        elif len(lis) == 6 and lis[1] in ["&", "t/m"]:
+            let1, start, tm, let2, end, month = lis
+            for index, m in enumerate(months):
+                if month.lower() == m:
+                    month = index + 1
+                    if month > 8:
+                        year = 2021
+                    else:
+                        year = 2022
+                    # print(summary, decription, date(year, month, int(start)), datetime.now(), datetime.now())
+                    Event.objects.create(
+                        summary=summary,
+                        description=decription,
+                        start_date=date(year, month, int(start)),
+                        start_time=datetime.now(),
+                        end_time=datetime.now(),
+                        end_date=date(year, month, int(end)),
+                    )
+
+                    break
+        else:
+            continue
         # print(event)
 
     return render(request, "home.html")
-
-

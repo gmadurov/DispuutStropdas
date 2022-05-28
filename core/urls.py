@@ -67,9 +67,8 @@ urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 from .settings import path as pa
 
 if os.getcwd() == pa:
-    from environment.start_up_db import start
-
-    urlpatterns.append(path("start-db/", start))
+    from environment.start_up_db import *
+    urlpatterns.append(path("start_db/", start))
 
 
 # 1 - User submits email for reset              //PasswordResetView.as_view()           //name="reset_password"
