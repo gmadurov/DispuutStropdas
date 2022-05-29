@@ -1,5 +1,9 @@
 import datetime
+
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db.models import Q
+
+from .models import Event
 
 # def searchLeden(request):
 #     search_query = ''
@@ -12,8 +16,6 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 #     return lidlist, search_query
 
 
-from .models import Event
-from django.db.models import Q
 
 
 def future_events(date):

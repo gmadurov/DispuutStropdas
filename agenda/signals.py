@@ -1,20 +1,8 @@
-from __future__ import print_function
-
-import datetime
+from datetime import datetime, time
 import json
-import os.path
-from datetime import timedelta
-from pathlib import Path
-from pprint import pprint
 
-import pytz
-from django.contrib import messages
+# import time
 from django.db.models.signals import post_delete, post_save
-from google.auth.transport.requests import Request
-from google.cloud import storage
-from google.oauth2 import service_account
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from oauth2client.service_account import ServiceAccountCredentials
@@ -23,19 +11,13 @@ from users.models import Lid
 from .models import AgendaClient, Event, NIEvent
 
 # If modifying these scopes, delete the file token.json.
-# SCOPES = ['https://www.googleapis.com/auth/calendar']
-# SCOPES = ['https://www.googleapis.com/auth/calendar','https://www.googleapis.com/auth/calendar.events','https://www.googleapis.com/auth/calendar.events.readonly','https://www.googleapis.com/auth/calendar.readonly']
-try:
-    SCOPES = (AgendaClient.objects.get(name="SCOPES").json).strip("][").split(", ")
-except:
-    pass
+SCOPES = (AgendaClient.objects.get(name="SCOPES").json).strip("][").split(", ")
 
 
 def get_service(refresh=False):
     credentials = ServiceAccountCredentials.from_json_keyfile_dict(
         json.loads(AgendaClient.objects.get(name="client_secret").json), scopes=SCOPES
     )
-
     service = build("calendar", "v3", credentials=credentials)
     return service
 
@@ -43,23 +25,31 @@ def get_service(refresh=False):
 def handle_event(sender, created, instance, **kwargs):
     """this function creates the events in the google agenda and updates them if changed in the website"""
     service = get_service()
-    evs = instance
-    queryset = Event.objects.filter(id=evs.id) # https://stackoverflow.com/questions/1555060/how-to-save-a-model-without-sending-a-signal
+    event = instance
+    if not event.end_date:
+        event.end_date = event.start_date
+    if not event.start_time:
+        event.start_time = time(15, 0)
+    if not event.end_time:
+        event.end_time = time(23, 59, 0)
+    if event.end_date < event.start_date:
+        event.end_date, event.start_date = event.start_date, event.end_date
+    queryset = Event.objects.filter(
+        id=event.id
+    )  # https://stackoverflow.com/questions/1555060/how-to-save-a-model-without-sending-a-signal
     # this is used so that we can update the google event within this signal without reshooting this signal(signals shot every time an object is saved)
-    event = {
-        "summary": evs.description,
-        "location": evs.location or "",
-        "description": (evs.description + " " + evs.summary),
+    event_body = {
+        "summary": event.description,
+        "location": event.location or "",
+        "description": f"{event.description} ({event.summary}) \n{'Kokers: '+event.kokers if event.kokers else ''}\n{'Kartrekkers: '+event.kartrekkers if event.kartrekkers else ''}\n{'Bijsonderheiden: '+event.bijzonderheden if event.bijzonderheden else ''}\n{'Extra info: '+event.info if event.info else ''}",
         "start": {
-            "dateTime": datetime.datetime.combine(
-                evs.start_date, evs.start_time
+            "dateTime": datetime.combine(
+                event.start_date, event.start_time
             ).isoformat(),
             "timeZone": "Europe/Amsterdam",
         },
         "end": {
-            "dateTime": datetime.datetime.combine(
-                evs.end_date, evs.end_time
-            ).isoformat(),
+            "dateTime": datetime.combine(event.end_date, event.end_time).isoformat(),
             "timeZone": "Europe/Amsterdam",
         },
         "recurrence": [],
@@ -68,30 +58,45 @@ def handle_event(sender, created, instance, **kwargs):
 
     if created or not instance.google_link:
         try:
-            event = (
+            google_event = (
                 service.events()
                 .insert(
                     calendarId=AgendaClient.objects.get(name="calendarId").json,
-                    body=event,
+                    body=event_body,
                 )
                 .execute()
             )
-            queryset.update(google_link=event["id"])
+            queryset.update(
+                google_link=google_event["id"],
+                start_date=event.start_date,
+                start_time=event.start_time,
+                end_date=event.end_date,
+                end_time=event.end_time,
+            )
+
         except HttpError as error:
             print("An error occurred:1 %s" % error)
             pass
     else:
         try:
-            event = (
+            google_event = (
                 service.events()
                 .update(
                     calendarId=AgendaClient.objects.get(name="calendarId").json,
-                    body=event,
-                    eventId=instance.google_link,
+                    body=event_body,
+                    eventId=event.google_link,
                 )
                 .execute()
             )
-            queryset.update(google_link=event["id"])
+            print(event)
+            queryset.update(
+                google_link=google_event["id"],
+                start_date=event.start_date,
+                start_time=event.start_time,
+                end_date=event.end_date,
+                end_time=event.end_time,
+            )
+
         except HttpError as error:
             print("An error occurred:2 %s" % error)
             pass

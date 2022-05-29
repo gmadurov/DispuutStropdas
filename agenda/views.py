@@ -61,13 +61,8 @@ def dsani(request):
     )
     events, search_query = searchEvents(request)
     custom_range, events = paginateEvents(request, events, 10, datetime.date.today())
-
     leden = NIEvent.objects.filter(lid=request.user.lid)
-    # dic_NI = {}
-    # for ev in events:
-    #     dic_NI[ev] = NIEvent.objects.filter(lid=request.user.lid, event=ev)
     leden = Lid.objects.filter(active=True)
-    # print(events)
     content = {
         "events": events,
         "leden": leden,
@@ -75,6 +70,7 @@ def dsani(request):
         "search_query": search_query,
         "custom_range": custom_range,
     }
+
     return render(request, "agenda/dsani.html", content)
 
 
@@ -85,18 +81,7 @@ def create_event(request):
         # creates the form object
         form = EventForm(request.POST)
         if form.is_valid():  # if its valid
-            event = form.save(commit=False)  # save the object to database
-            if not event.end_date:
-                event.end_date = event.start_date
-            if not event.end_time and event.start_time:
-                event.end_time = event.start_time
-            elif not event.end_time:
-                event.end_time = datetime.datetime.min.time()
-            if not event.start_time:
-                event.start_time = datetime.datetime.min.time()
-            if event.end_date < event.start_date:
-                event.end_date, event.start_date = event.start_date, event.end_date
-            event.save()
+            form.save()  # the handeling of the times and dates are handeled in signals.py
             messages.info(request, "Event was created")
             return redirect("agenda")
     context = {
@@ -114,18 +99,7 @@ def edit_event(request, pk):
         # creates the form object
         form = EventForm(request.POST, instance=event)
         if form.is_valid():  # if its valid
-            event = form.save(commit=False)  # save the object to database
-            if not event.end_date:
-                event.end_date = event.start_date
-            if not event.end_time and event.start_time:
-                event.end_time = event.start_time
-            elif not event.end_time:
-                event.end_time = datetime.datetime.min.time()
-            if not event.start_time:
-                event.start_time = datetime.datetime.min.time()
-            if event.end_date < event.start_date:
-                event.end_date, event.start_date = event.start_date, event.end_date
-            event.save()
+            form.save()  # the handeling of the times and dates are handeled in signals.py
             messages.info(request, "Event was edited")
             return redirect("agenda")
     context = {
@@ -151,7 +125,6 @@ def delete_event(request, pk):
 
 @login_required(login_url="login")
 def edit_dsani(request, pk):
-    lid = request.user.lid
     nievent = NIEvent.objects.get(id=pk)
     form = NIEventForm(instance=nievent)
     if request.method == "POST":  # checks the method

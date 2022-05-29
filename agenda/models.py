@@ -48,8 +48,9 @@ class Event(models.Model):
     location = models.CharField(max_length=50, null=True, blank=True)
     kokers = models.CharField(max_length=50, null=True, blank=True)
     kartrekkers = models.CharField(max_length=50, null=True, blank=True)
+    info = models.TextField( null=True, blank=True)
     budget = models.CharField(max_length=50, null=True, blank=True)
-    bijzonderheden = models.CharField(max_length=50, null=True, blank=True)
+    bijzonderheden = models.CharField(max_length=50, default = "Op Afmelding", choices = BIJZONDERHEIDEN)
     google_link = models.CharField(max_length=150, null=True, blank=True)
 
     # Datum	Activiteit	Kokers	Omschrijving	Kartrekkers	Bijzonderheden	Budget

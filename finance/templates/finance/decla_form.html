@@ -15,13 +15,14 @@
           </br>
 
           <!-- TODO: SHOW IF IIS ITHE FI -->
-          {% elif field.label == 'Verwerkt'%} {%if request.user|has_group:"Fiscus" %}
-          <label for="formInput#text">{{field.label}}: </label>
-          {{field}} 
-          {%endif%}
+          {% elif field.label == 'Verwerkt' or field.label == 'content_fiscus' %} 
+            {%if request.user|has_group:"Fiscus" %}
+            <label for="formInput#text">{{field.label}}: </label>
+            {{field}}
+            {%endif%}
           {%else %}
-          <label for="formInput#text">{{field.label}}: </label>
-          {{field}}
+            <label for="formInput#text">{{field.label}}: </label>
+            {{field}}
           {% endif%}
           {% endfor %}</tr>
         </table>
