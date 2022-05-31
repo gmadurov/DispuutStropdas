@@ -2,20 +2,36 @@
 <main class="columns is-centered">
   <div class="column is-2 is-offset-2 card">
     <div class="">
-      {% for year in years %}
-      <li><a href="{% url 'documentsPerYear' year%}">{{year}}</a></li>
+      {% for roman, year in years %}
+      <li><a href="{% url 'documentsPerYear' year%}">{{roman}}</a></li>
       {%endfor%}
     </div>
   </div>
 
   <div class="column is-3 card" style="text-align: left; padding-left: 10px;">
-      {% for document in documents %}
-      <li>
-        <a href="{% url 'document' document.id%}?next={% url 'documents'%}">
-          {{document.name}}</a
-        >
-      </li>
-      {%endfor%}
+    {% for document in documents %}
+    <li>
+      <div class="dropdown is-hoverable">
+        <span aria-haspopup="true" aria-controls="dropdown-menu4">
+          <span><a href="{% url 'document' document.id%}?next={% url 'documents'%}">
+              {{document.name}}</a></span>
+        </span>
+        <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+          <!-- <div class="dropdown-content"> -->
+          <!-- <div class="dropdown-item"> -->
+
+          <iframe src="{{document.file.url}}" type="application/pdf" frameborder="0" scrolling="auto" height="100%"
+            width="500%"></iframe>
+          <br />
+
+          <!-- </div> -->
+          <!-- </div> -->
+        </div>
+
+      </div>
+    </li>
+
+    {%endfor%}
   </div>
   <a href="{% url 'add-document'%}"> Document toevoeren </a>
 </main>

@@ -2,19 +2,26 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from .forms import DeclaForm
+from .forms import DeclaForm, FicusForm
 from .models import Decla, Stand
 
 # Create your views here.
+
 
 @login_required(login_url="login")
 def fileDecla(request):
     form = DeclaForm()
     if request.method == "POST":
+        print(1, request.POST)
         form = DeclaForm(request.POST, request.FILES)
         if form.is_valid():
-            decla = form.save(commit=False)
+            print(form)
+            decla = form.save()
+            # decla = form.save(commit=False)
             decla.owner = request.user.lid
+            # decla.present.set(request.POST["present"])
+            print(2, decla.present.all())
+            print(3, decla)
             decla.save()
             messages.info(request, "Decla was created")
             return redirect("agenda")
@@ -24,26 +31,31 @@ def fileDecla(request):
     }
     return render(request, "finance/decla_form.html", context)
 
+
 @login_required(login_url="login")
 def editDecla(request, pk):
     decla = Decla.objects.get(id=pk)
     form = DeclaForm(instance=decla)
     if request.method == "POST":
+        print(request.POST)
+
         form = DeclaForm(request.POST, request.FILES, instance=decla)
         if form.is_valid():
+            # print(form)
             # decla = form.save(commit=False)
             decla = form.save()
             # "taken out because the owner is the one who
             # creates it to avoid problems when edditing from sennate"
             # decla.owner = request.user.lid
             # decla.save()
-            messages.info(request, "Decla was created")
+            messages.info(request, "Decla was edited")
             return redirect(request.GET["next"] if "next" in request.GET else "agenda")
     context = {
         "form": form,
         "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,
     }
     return render(request, "finance/decla_form.html", context)
+
 
 @login_required(login_url="login")
 def deleteDecla(request, pk):
@@ -58,15 +70,16 @@ def deleteDecla(request, pk):
     }
     return render(request, "delete-template.html", content)
 
+
 @login_required(login_url="login")
 def showDecla(request, pk):
     decla = Decla.objects.get(id=pk)
-    form = DeclaForm(instance=decla)
     content = {
         "decla": decla,
         "stand": Stand.objects.get(owner_id=request.user.lid.id).amount,
     }
     return render(request, "finance/show_decla.html", content)
+
 
 @login_required(login_url="login")
 def verwerkenDecla(request):

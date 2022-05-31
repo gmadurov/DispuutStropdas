@@ -55,7 +55,11 @@
 
             {% endif %}
             <td style="text-align: center">
-              {{event.kokers|default_if_none:""}}
+              {% if event.kokers %}
+              {%for koker in event.kokers.all%}
+              {{koker.initials|default_if_none:" "}}
+              {%endfor%}
+              {% endif %}
             </td>
 
             <td style="text-align: center">{{event.description}}</td>

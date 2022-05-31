@@ -11,7 +11,11 @@ from users.models import Lid
 from .models import AgendaClient, Event, NIEvent
 
 # If modifying these scopes, delete the file token.json.
-SCOPES = (AgendaClient.objects.get(name="SCOPES").json).strip("][").split(", ")
+
+try:
+    SCOPES = (AgendaClient.objects.get(name="SCOPES").json).strip("][").split(", ")
+except:
+    pass
 
 
 def get_service(refresh=False):
@@ -38,10 +42,11 @@ def handle_event(sender, created, instance, **kwargs):
         id=event.id
     )  # https://stackoverflow.com/questions/1555060/how-to-save-a-model-without-sending-a-signal
     # this is used so that we can update the google event within this signal without reshooting this signal(signals shot every time an object is saved)
+    # print(event.kokers.all())
     event_body = {
         "summary": event.description,
         "location": event.location or "",
-        "description": f"{event.description} ({event.summary}) \n{'Kokers: '+event.kokers if event.kokers else ''}\n{'Kartrekkers: '+event.kartrekkers if event.kartrekkers else ''}\n{'Bijsonderheiden: '+event.bijzonderheden if event.bijzonderheden else ''}\n{'Extra info: '+event.info if event.info else ''}",
+        "description": f"{event.description} ({event.summary}) \n{'Kokers: '+ str(koker.initials for koker in event.kokers.all()) if event.kokers else ''}\n{'Kartrekkers: '+event.kartrekkers if event.kartrekkers else ''}\n{'Bijsonderheiden: '+event.bijzonderheden if event.bijzonderheden else ''}\n{'Extra info: '+event.info if event.info else ''}",
         "start": {
             "dateTime": datetime.combine(
                 event.start_date, event.start_time
@@ -88,7 +93,6 @@ def handle_event(sender, created, instance, **kwargs):
                 )
                 .execute()
             )
-            print(event)
             queryset.update(
                 google_link=google_event["id"],
                 start_date=event.start_date,

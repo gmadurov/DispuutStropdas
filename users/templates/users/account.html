@@ -1,4 +1,4 @@
-{% extends 'main.html'%}
+{% extends 'main.html'%}{% load auth_tags %}
 {% block content%}
 
 </header>
@@ -19,7 +19,72 @@
           </p>
         </div>
       </div>
+      <div class="card text-center mt-2" style="padding: 10px;">
+        <div class=" is-centered">
+          <p>Kookshifts:</p>
+
+            <div class="table is-bordered is-striped is-narrow is-hoverable is-centered is-three-forths">
+
+              <table  style="border: 1px solid black">
+                <th>Datum</th>
+                <th>Activiteit</th>
+                <th>Kokers</th>
+                <th>Omschrijving</th>
+                {% for event in lid.kookshift.all %}
+                <tr>
+                  <td style="text-align: center">
+                    {{event.start_date|default_if_none:""}}
+                  </td>
+                  {% if event.summary == 'Wedstrijd' %}
+                  <td style="text-align: center; background-color: red">
+                    {{event.summary}}
+                  </td>
+                  {% elif event.summary == 'Dispuutsactiviteit'%}
+                  <td style="text-align: center; background-color: green; color: white">
+                    {{event.summary}}
+                  </td>
+                  {% elif event.summary == 'Borrel'%}
+                  <td style="text-align: center; background-color: pink; color: black">
+                    {{event.summary}}
+                  </td>
+                  {% elif event.summary == 'Dispuutsverjaardag'%}
+                  <td style="text-align: center; background-color: #bbd334">
+                    {{event.summary}}
+                  </td>
+                  {% elif event.summary == 'Clubactiviteit'%}
+                  <td style="text-align: center; background-color: yellow">
+                    {{event.summary}}
+                  </td>
+                  {% elif event.summary == 'Activiteit'%}
+                  <td style="
+                  text-align: center;
+                  background-color: rgba(35, 32, 209, 0.685);
+                ">
+                    {{event.summary}}
+                  </td>
+                  {%else %}
+                  <td style="text-align: center">
+                    {{event.summary|default_if_none:""}}
+                  </td>
+
+                  {% endif %}
+                  <td style="text-align: center">
+                    {% if event.kokers %}
+                    {%for koker in event.kokers.all%}
+                    {{koker.initials|default_if_none:" "}}
+                    {%endfor%}
+                    {% endif %}
+                  </td>
+                  <td style="text-align: center">{{event.description}}</td>
+                </tr>
+                {%endfor%}
+              </table>
+          <!-- </div> -->
+        </div>
+      </div>
     </div>
+
+
     <div class="column --1of3">
       <div class="columns is-centered">
 
@@ -29,11 +94,11 @@
           {%for decla in declasFILED %}
           <div class="card" style="padding:10px;">
             <div class="card__body">
-              <a class="tag tag--pill tag--main settings__btn" href="{% url 'editDecla' decla.id %}?next={% url 'account' %}"><i
-                  class="im im-edit">Edit</i>
+              <a class="tag tag--pill tag--main settings__btn"
+                href="{% url 'editDecla' decla.id %}?next={% url 'account' %}"><i class="im im-edit">Edit</i>
               </a>
-              <a class="tag tag--pill tag--main settings__btn" href="{% url 'deleteDecla' decla.id %}?next={% url 'account' %}"><i
-                  class="im im-edit">Delete</i>
+              <a class="tag tag--pill tag--main settings__btn"
+                href="{% url 'deleteDecla' decla.id %}?next={% url 'account' %}"><i class="im im-edit">Delete</i>
               </a>
               <p class="dev__title">
                 {{decla.event}}, €{{decla.total}}
@@ -43,16 +108,16 @@
           {%endfor%}
         </div>
       </div>
-      <div class="columns is-centered">
+      <div class="columns is-centered mt-2">
 
         <div class="column card text-center">
-          Declas op mij 
+          Declas op mij
 
           {%for decla in declasPRESENT %}
           <div class="card" style="padding:10px;">
             <div class="card__body">
-              <a class="tag tag--pill tag--main settings__btn" href="{% url 'showDecla' decla.id %}?next={% url 'account' %}"><i
-                  class="im im-edit">Toon</i>
+              <a class="tag tag--pill tag--main settings__btn"
+                href="{% url 'showDecla' decla.id %}?next={% url 'account' %}"><i class="im im-edit">Toon</i>
               </a>
               <p class="dev__title">
                 {{decla.event}}, €{{decla.total}}

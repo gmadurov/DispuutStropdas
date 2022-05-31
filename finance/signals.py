@@ -58,7 +58,13 @@ def StandUpdate():
 
 
 def updateStand(sender, instance, **kwargs):
-    StandUpdate()
+    '''if all declas are verwerkt then do a stand update'''
+    declas = Decla.objects.all()
+    for decla in declas:
+        if not decla.verwerkt:
+            break
+    else:
+        StandUpdate()
 
 post_save.connect(updateStand, sender=Decla)
 post_delete.connect(updateStand, sender=Decla)

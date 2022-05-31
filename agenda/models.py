@@ -46,7 +46,7 @@ class Event(models.Model):
     end_time = models.TimeField(null=True, blank=True)
     recuring = models.CharField(max_length=50, null=True, blank=True)
     location = models.CharField(max_length=50, null=True, blank=True)
-    kokers = models.CharField(max_length=50, null=True, blank=True)
+    kokers = models.ManyToManyField(Lid, blank=True, related_name="kookshift")
     kartrekkers = models.CharField(max_length=50, null=True, blank=True)
     info = models.TextField( null=True, blank=True)
     budget = models.CharField(max_length=50, null=True, blank=True)

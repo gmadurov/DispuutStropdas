@@ -1,45 +1,101 @@
 {% load static %}{% load auth_tags %}
 <!-- Header Section -->
 <div class="menu" style="background-color: #fff;">
+  <div class="columns is-centered">
+    <div class="column">
 
-  <a href="{% url 'home' %}" class="header__logo">
-    <img src="{% static 'images/blazoen.png'%}" alt="Home" style="width: 50px;height 100px;" />
-  </a>
-  {% if request.user.is_authenticated %}
+      <div class="dropdown is-hoverable">
+        <span aria-haspopup="true" aria-controls="dropdown-menu4">
+          <a href="{% url 'home' %}" class="header__logo">
+            <img src="{% static 'images/blazoen.png'%}" alt="Home" style="width: 50px;height 100px;" />
+          </a>
+        </span>
 
+      </div>
+      <div class="column">
 
-  {% comment %} <a href="{%  url 'link'  %}">name</a> {% endcomment %}
-  <a href="{%  url 'agenda'  %}">Agenda</a>
-  <a href="{%  url 'DSANI'  %}">DSANI</a>
-  <a href="{%  url 'try_out'  %}">Try out</a>
-  <a href="{%  url 'documents'  %}">Documents</a>
-  <a href="{%  url 'fileDecla'  %}">Decla</a>
+        {% comment %} <a href="{%  url 'link'  %}">name</a> {% endcomment %}
+        <div class="dropdown is-hoverable">
+          <span aria-haspopup="true" aria-controls="dropdown-menu4">
+            <span><a>Evenementen</a></span>
+          </span>
+          <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+            <div class="dropdown-content">
+              <div class="dropdown-item">
+                <li>
+                  <a href="{%  url 'agenda'  %}">Agenda</a>
+                </li>
+                <li>
+                  <a href="{%  url 'DSANI'  %}">DSANI</a>
+                </li>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column">
 
+        <div class="dropdown is-hoverable">
+          <span aria-haspopup="true" aria-controls="dropdown-menu4">
+            <span><a>Declas en Documenten</a></span>
+          </span>
+          <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+            <div class="dropdown-content">
+              <div class="dropdown-item">
+                <li>
+                  <a href="{%  url 'documents'  %}">Documents</a>
+                </li>
+                <li>
+                  <a href="{%  url 'fileDecla'  %}">Decla</a>
+                </li>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column">
 
-  <a href="{%  url 'account'  %}">My Account (€{{stand}})</a>
-  {%if request.user|has_group:"Fiscus" %}
-  <a href="{% url 'verwerkenDecla'%}">Verwerkt Declas</a>
-  <a href="{% url 'exportDeclas'%}">Export Declas</a>
-  {%endif%}
-  {%if request.user.is_superuser %}
-  <a href="/admin/">Admin</a>
-  {%endif%}
-  <a href="{% url 'logout' %}">Logout</a>
-  {% else %}
-  <a href="{% url 'login' %}">Login/Sign Up</a>
-  {% endif %}
-  {% if messages %} {% for message in messages %}
-  <article id="alert" class="message is-{{message.tags}}">
-    <div class="message-header">
-      <p>{{message}}</p>
-      <button class="delete" id="alert__close" aria-label="delete"></button>
+        <div class="dropdown is-hoverable">
+          <span aria-haspopup="true" aria-controls="dropdown-menu4">
+            <span><a>Account</a></span>
+          </span>
+          <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+            <div class="dropdown-content">
+              <div class="dropdown-item">
+                <li>
+                  <a href="{%  url 'account'  %}">My Account (€{{stand}})</a>
+                </li> {%if request.user|has_group:"Fiscus" %}
+                <li>
+                  <a href="{% url 'verwerkenDecla'%}">Verwerkt Declas</a>
+                </li>
+                <li>
+                  <a href="{% url 'exportDeclas'%}">Export Declas</a>
+                </li>{%endif%}
+                {%if request.user.is_superuser %}
+                  <li><a href="/admin/">Admin</a></li>
+                  {%endif%}
+                
+                <li>
+                  <a href="{% url 'logout' %}">Logout</a>
+                </li>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </article>
-  {% endfor %} {% endif %}
-</div>
-<div class="columns">
-  <div class="column is-2">
+    {% if messages %} {% for message in messages %}
+    <article id="alert" class="message is-{{message.tags}}">
+      <div class="message-header">
+        <p>{{message}}</p>
+        <button class="delete" id="alert__close" aria-label="delete"></button>
+      </div>
     </article>
+    {% endfor %} {% endif %}
   </div>
-</div>
-<hr />
+  <div class="columns">
+    <div class="column is-2">
+      </article>
+    </div>
+  </div>
+  <hr />

@@ -3,6 +3,7 @@ from datetime import datetime
 from multiprocessing import Event
 
 import pandas as pd
+from requests import request
 from agenda.models import Event
 from django.db import models
 from django.http import HttpResponse, FileResponse
@@ -34,11 +35,11 @@ class Boekstuk(models.Model):
 
 class Decla(models.Model):
     # owner, event, content, total, present, senate_year, receipt, reunist, kmters, verwerkt
-    owner = models.ForeignKey(Lid, on_delete=models.CASCADE)
+    owner = models.ForeignKey(Lid,default=19900, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.SET_NULL, null=True, blank=True)
     content = models.TextField(max_length=50)
     total = models.FloatField()
-    present = models.ManyToManyField(Lid, blank=True, related_name="present_leden")
+    present = models.ManyToManyField(Lid, related_name="present_leden")
     receipt = models.ImageField(
         upload_to="declas/", null=True, blank=True
     )  ## this will need to be put back to nothing when it ends
@@ -154,11 +155,7 @@ class Decla(models.Model):
                 # "Dispuut",
                 # " ",
             ]
-            + [
-                lid.initials
-                for lid in Lid.objects.all()
-                for i in range(2)
-            ],
+            + [lid.initials for lid in Lid.objects.all() for i in range(2)],
         )
         # # resp = HttpResponse(content_type="text/csv")
         # # resp["Content-Disposition"] = "attachment; filename=myFile.csv"

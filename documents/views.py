@@ -3,12 +3,39 @@ from django.shortcuts import redirect, render
 
 from documents.forms import DocumentForm
 from finance.models import Stand
+import numpy as np
 
 from .models import Document
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import DocumentForm
 from django.db.models import Q
+
+
+def roman(num):
+    res = ""
+    table = [
+        (1000, "M"),
+        (900, "CM"),
+        (500, "D"),
+        (400, "CD"),
+        (100, "C"),
+        (90, "XC"),
+        (50, "L"),
+        (40, "XL"),
+        (10, "X"),
+        (9, "IX"),
+        (5, "V"),
+        (4, "IV"),
+        (1, "I"),
+    ]
+    for cap, roman in table:
+        d, m = divmod(num, cap)
+        res += roman * d
+        num = m
+
+    return res
+
 
 # Create your views here.
 @login_required(login_url="login")
@@ -27,18 +54,18 @@ def addDocument(request):
                 break
             else:
                 condi = False
-        if condi:
-            if form.is_valid():
+        if form.is_valid():
+            if condi:
                 document = form.save(commit=False)
                 document.owner = request.user.lid
                 document.save()
                 return redirect("documents")
             else:
-                messages.error(request, "an error occurred while creating document")
-                return redirect("documents")
+                messages.error(request, "Document upload has to be a a pdf")
         else:
-            messages.error(request, "Document upload has to be a a pdf")
+            messages.error(request, "an error occurred while creating document")
             return redirect("documents")
+            # return redirect("documents")
     return render(request, "documents/document-form.html", content)
 
 
@@ -53,23 +80,23 @@ def editDocument(request, pk):
     if request.method == "POST":
         form = DocumentForm(request.POST, request.FILES, instance=document)
         condi = len(request.FILES) == 0
+        # condi = True
         for k, v in request.FILES.items():
             if k == "file" and (v.name.endswith(".pdf") or v == None):
                 condi = True
                 break
             else:
                 condi = False
-        if condi:
-            if form.is_valid():
+        if form.is_valid():
+            if condi:
                 document = form.save(commit=False)
                 document.owner = request.user.lid
                 document.save()
                 return redirect("documents")
             else:
-                messages.error(request, "an error occurred while updating document")
-                return redirect("documents")
+                messages.error(request, "CV upload has to be a a pdf")
         else:
-            messages.error(request, "CV upload has to be a a pdf")
+            messages.error(request, "an error occurred while updating document")
             return redirect("documents")
     return render(request, "documents/document-form.html", content)
 
@@ -101,7 +128,12 @@ def showDocument(request, pk):
 @login_required(login_url="login")
 def showDocumentsPerYear(request, year):
     documents = Document.objects.filter(senate_year__exact=year)
-    years = [doc.senate_year for doc in Document.objects.all()]
+    years = [
+        (roman(i), i)
+        for i in np.unique(
+            np.array([doc.senate_year for doc in Document.objects.all()])
+        )
+    ]
     content = {
         "documents": documents,
         "years": years,
@@ -113,7 +145,10 @@ def showDocumentsPerYear(request, year):
 @login_required(login_url="login")
 def showDocuments(request):
     documents = Document.objects.all()
-    years = [doc.senate_year for doc in documents]
+    years = [
+        (roman(i), i)
+        for i in np.unique(np.array([doc.senate_year for doc in documents]))
+    ]
     content = {
         "documents": documents,
         "years": years,

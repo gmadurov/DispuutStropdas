@@ -2,3 +2,11 @@
 2. beer paal(KIJKEN OP DE SHEET LEX STUURT)
 actual amount paid per event in the afgelopen event lijst
 if all declas are verwerkt and a stand amount is below 10€ send email 
+
+verwerkt button by every decla in verwerktDeclas page
+
+
+
+
+
+https://stackoverflow.com/questions/72432863/multi-select-checkbox-doesnt-work-creating-object-in-django 

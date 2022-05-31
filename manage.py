@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/home/gusmadvol/.local/share/virtualenvs/DispuutStropdas-agfYmyxR/bin/activate
 """Django's command-line utility for administrative tasks."""
 import os
 import sys

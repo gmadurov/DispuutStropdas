@@ -63,11 +63,6 @@ INSTALLED_APPS = [
     "rest_framework",
     "storages",
     #################
-    # 'django.contrib.sites',
-    # 'allauth',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
-    # 'allauth.socialaccount.providers.google',
 ]
 
 # SITE_ID = 1
@@ -170,7 +165,6 @@ USE_TZ = True
 STATIC_URL = "/static/"
 # start
 MEDIA_URL = "/images/"
-
 STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_ROOT = BASE_DIR / "static/images"
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -190,13 +184,3 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = os.environ.get("BUCKET_NAME")
-### end
-# SOCIALACCOUNT_PROVIDERS = {
-#     'google': {
-#         'APP': {
-#             'client_id': '123878689604-9nkm7r8u9mkr3tocvufb3ejslf93vo21.apps.googleusercontent.com',
-#             'secret': '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',
-#             'key': ''
-#         }
-#     }
-# }

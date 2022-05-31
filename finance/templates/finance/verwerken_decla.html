@@ -8,6 +8,7 @@
                 <th>Event</th>
                 <th>Sort</th>
                 <th>Lid</th>
+                <th>Receipt</th>
                 <th>Boekstuk</th>
                 <th>Ficus Comment</th>
                 <th>Total</th>
@@ -56,6 +57,21 @@
 
                     <td style="text-align: center">
                         {{decla.owner.initials}}
+                    </td>
+                    <td style="text-align: center">
+
+                        <div class="dropdown is-hoverable">
+                            <span aria-haspopup="true" aria-controls="dropdown-menu4">
+                                <span><a>
+                                        Image</a></span>
+                            </span>
+                            {% if decla.imageURL%}
+                            <div class="dropdown-menu" id="dropdown-menu4" role="menu" style="width: 500;">
+                                <image src="{{decla.imageURL}}"></image>
+                                <br />
+                            </div>
+                            {% endif %}
+                        </div>
                     </td>
                     <td style="text-align: center">
                         {{decla.boekstuk}}

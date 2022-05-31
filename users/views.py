@@ -52,7 +52,7 @@ def leden(request):
     # custom_range, lidlist = paginateLeden(request, lidlist, 3)
     search_query = 0
     custom_range = 0
-    ledenlist = Lid.objects.filter(active = True)
+    ledenlist = Lid.objects.filter(active=True)
     content = {
         "leden": ledenlist,
         "search_query": search_query,

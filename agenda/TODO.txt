@@ -18,3 +18,10 @@ Under "APIs & Services">"Credentials", select "Create Credentials" and click on 
 This will redirect you to the credentials page. Under the "Service accounts" click on the desired account(this will redirect you to the IAM & Admin panel) Under the tab "Keys" click "ADD KEY" and select json, this will download a json file to your computer.
 
 in the Calendar page in google get and add the calendar ID to the admin panel under AgendaClients "CalendarId" add the service account to the people shared as admin (make changes to events)
+
+
+
+
+
+TODO 
+kookshifts

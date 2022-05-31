@@ -8,28 +8,15 @@
         {% csrf_token %}
         <table style="width: 100%; border: 1px solid black">
           {% for field in form %}
-          {% if field.label == 'Present'%}
-          <!-- Input:{{field.label}} -->
-          <label for="formInput#text">{{field.label}}: </label>
-          {{field}}
-          </br>
-
-          <!-- TODO: SHOW IF IIS ITHE FI -->
-          {% elif field.label == 'Verwerkt' or field.label == 'content_fiscus' %} 
-            {%if request.user|has_group:"Fiscus" %}
-            <label for="formInput#text">{{field.label}}: </label>
-            {{field}}
-            {%endif%}
-          {%else %}
-            <label for="formInput#text">{{field.label}}: </label>
-            {{field}}
-          {% endif%}
+            
+              <label for="formInput#text">{{field.label}}: </label></br>
+              {{field}}
           {% endfor %}</tr>
         </table>
 
 
     </div>
-    <input class="btn btn--sub btn--lg  my-md" type="submit" value="Submit" />
+    <input class="button" type="submit" value="Submit" />
     </form>
   </div>
   </div>
