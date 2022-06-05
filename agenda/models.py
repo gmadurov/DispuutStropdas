@@ -38,6 +38,7 @@ class Event(models.Model):
         ("Op Aanmelding", "Op Aanmelding"),
         (" ", " "),
     )
+    # summary,description,start_date,start_time,end_date,end_time,recuring,location,koker,kartrekkers,info,budget, bijzonderheden
     summary = models.CharField(max_length=50, choices=EVENT_CHOICES)
     description = models.CharField(max_length=50, null=True, blank=True)
     start_date = models.DateField()
@@ -53,7 +54,6 @@ class Event(models.Model):
     bijzonderheden = models.CharField(max_length=50, default = "Op Afmelding", choices = BIJZONDERHEIDEN)
     google_link = models.CharField(max_length=150, null=True, blank=True)
 
-    # Datum	Activiteit	Kokers	Omschrijving	Kartrekkers	Bijzonderheden	Budget
     def __str__(self):
         return str(self.description) + ", " + str(self.start_date)
 
