@@ -12,16 +12,12 @@ from .models import Decla, Stand
 def fileDecla(request):
     form = DeclaForm()
     if request.method == "POST":
-        print(1, request.POST)
         form = DeclaForm(request.POST, request.FILES)
         if form.is_valid():
-            print(form)
             decla = form.save()
             # decla = form.save(commit=False)
             decla.owner = request.user.lid
             # decla.present.set(request.POST["present"])
-            print(2, decla.present.all())
-            print(3, decla)
             decla.save()
             messages.info(request, "Decla was created")
             return redirect("agenda")

@@ -7,7 +7,7 @@
       <div class="dropdown is-hoverable">
         <span aria-haspopup="true" aria-controls="dropdown-menu4">
           <a href="{% url 'home' %}" class="header__logo">
-            <img src="{% static 'images/blazoen.png'%}" alt="Home" style="width: 50px;height 100px;" />
+            <img src="{% static 'images/blazoen.png'%}" alt="Home" style="width: 50px; height: 100px" />
           </a>
         </span>
 
@@ -47,6 +47,41 @@
                 </li>
                 <li>
                   <a href="{%  url 'fileDecla'  %}">Decla</a>
+                </li>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+
+        <div class="dropdown is-hoverable">
+          <span aria-haspopup="true" aria-controls="dropdown-menu4">
+            <span><a>Development</a></span>
+          </span>
+          <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+            <div class="dropdown-content">
+              <div class="dropdown-item">
+                <li>
+                  <a href="{%  url 'start_all'  %}">START Client</a>
+                </li>
+                <li>
+                  <a href="{%  url 'start_event'  %}">START Events</a>
+                </li>
+                <li>
+                  <a href="{%  url 'start_leden'  %}">START Leden</a>
+                </li>
+                <li>
+                  <a href="{%  url 'start_decla'  %}">START Decla</a>
+                </li>
+                <li>
+                  <a href="{%  url 'delete_event'  %}">DELETE Events</a>
+                </li>
+                <li>
+                  <a href="{%  url 'delete_leden'  %}">DELETE Leden</a>
+                </li>
+                <li>
+                  <a href="{%  url 'delete_decla'  %}">DELETE Decla</a>
                 </li>
               </div>
             </div>

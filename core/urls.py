@@ -68,7 +68,14 @@ from .settings import path as pa
 
 if os.getcwd() == pa:
     from environment.start_up_db import *
-    urlpatterns.append(path("start_db/", start))
+
+    urlpatterns.append(path("start_events/", startEVENTS, name = 'start_event'))
+    urlpatterns.append(path("start_leden/", startLEDEN, name = 'start_leden'))
+    urlpatterns.append(path("start_decla/", startDECLA, name = 'start_decla'))
+    urlpatterns.append(path("start_all/", start_all, name = 'start_all'))
+    urlpatterns.append(path("delete_event/", deleteEVENTS, name = 'delete_event'))
+    urlpatterns.append(path("delete_leden/", deleteLEDEN, name = 'delete_leden'))
+    urlpatterns.append(path("delete_decla/", deleteDECLA, name = 'delete_decla'))
 
 
 # 1 - User submits email for reset              //PasswordResetView.as_view()           //name="reset_password"

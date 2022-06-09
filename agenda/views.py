@@ -77,6 +77,7 @@ def dsani(request):
 @login_required(login_url="login")
 def create_event(request):
     form = EventForm()
+    print(form)
     if request.method == "POST":  # checks the method
         # creates the form object
         form = EventForm(request.POST)
