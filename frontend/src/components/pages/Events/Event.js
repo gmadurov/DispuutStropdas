@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
+import React from "react";
 // import { format } from "date-fns";
 import moment from "moment";
-import ClickDropdown from "../global/ClickDropdown";
+import ClickDropdown from "../../global/ClickDropdown";
 import EventForm from "./EventForm";
 
-const Event = ({  event, onAdd, onEdit, onDelete }) => {
+const Event = ({ event, onAdd, onEdit, onDelete }) => {
   let styleSummary;
   event.summary === "Wedstrijd"
     ? (styleSummary = { textAline: "center", backgroundColor: "red" })
@@ -33,7 +34,11 @@ const Event = ({  event, onAdd, onEdit, onDelete }) => {
   return (
     <tr>
       <td style={{ textAline: "center" }}>
-        {event.start_date ? moment(event.start_date+'T'+event.start_time).format("ddd Do MMM, hh:mmA") : " "}{" "}
+        {event.start_date
+          ? moment(event.start_date + "T" + event.start_time).format(
+              "ddd Do MMM, hh:mmA"
+            )
+          : " "}{" "}
         {/* "{ event.start_date+'T'+event.start_time}" */}
       </td>
 

@@ -4,6 +4,7 @@
 from datetime import datetime, date, time
 import doctest
 from django.http import JsonResponse
+from .utils import future_events, paginateEvents, searchEvents
 from finance.models import Decla
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -12,6 +13,7 @@ from users.forms import LidForm
 from .serializers import (
     DeclaSerializer,
     DocumentSerializer,
+    DsaniSerializer,
     EventSerializer,
     LidSerializer,
     NIEventSerializer,
@@ -150,15 +152,16 @@ def addEvents(request):
         # kokers=data["kokers"] or [],
     )
     event.save()
-    print("saved")
+    # print("saved")
     serializer = EventSerializer(event, many=False)
     return Response(serializer.data)
 
 
 @api_view(["GET"])
-def getDsaniS(request):
-    events = NIEvent.objects.all()
-    serializer = NIEventSerializer(events, many=True)
+def getDsaniS(request, pagenum=None):
+    if pagenum:events = paginateEvents(request, page=pagenum, results=20)
+    else: events= Event.objects.all()
+    serializer = DsaniSerializer(events, many=True)
     return Response(serializer.data)
 
 
@@ -168,19 +171,21 @@ def getDsani(request, nievent_id):
     serializer = NIEventSerializer(events, many=True)
     return Response(serializer.data)
 
+
 @api_view(["PUT"])
 def editDsani(request, nievent_id):
-    events = NIEvent.objects.get(id=nievent_id)
-    serializer = NIEventSerializer(events, many=True)
+    event = NIEvent.objects.get(id=nievent_id)
+    event.note = request.data["note"]
+    event.points = request.data["points"]
+    event.save()
+    serializer = NIEventSerializer(event, many=False)
     return Response(serializer.data)
+
 
 @api_view(["DELETE"])
 def deleteDsani(request, nievent_id):
     events = NIEvent.objects.get(id=nievent_id).delete()
     return Response()
-
-
-
 
 
 @api_view(["GET"])

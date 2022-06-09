@@ -7,9 +7,12 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path("", views.getRoutes),
+
     path("leden/", views.getLeden),
     path("lid/<str:pk>", views.getLid),
     path("documents/", views.getDocuments),
+
+
     path("decla/", views.makeDecla),
     path("decla/<str:decla_id>", views.getDecla),
     path("add_document/", views.add_Document),
@@ -23,9 +26,10 @@ urlpatterns = [
 
 
     path("dsani/", views.getDsaniS),
-    path("dsani/<str:nievent_id>/", views.getDsani),
-    path("edit-dsani/<str:nievent_id>/", views.editDsani),
-    path("delete-dsani/<str:nievent_id>/", views.deleteDsani),
+    path("dsani/pages/<int:pagenum>", views.getDsaniS),
+    path("dsani/<str:nievent_id>", views.getDsani),
+    path("edit-dsani/<str:nievent_id>", views.editDsani),
+    path("delete-dsani/<str:nievent_id>", views.deleteDsani),
 
     path("users/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("users/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),

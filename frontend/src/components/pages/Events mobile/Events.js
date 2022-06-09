@@ -1,8 +1,9 @@
 import PropTypes from "prop-types";
+import React from "react";
 import Event from "./Event";
-import Page from "../Page";
+import Page from "../../Page";
 import EventForm from "./EventForm";
-import ClickDropdown from "../global/ClickDropdown";
+import ClickDropdown from "../../global/ClickDropdown";
 
 const Events = ({ allEvents, onAdd, onEdit, onDelete }) => {
   return (
@@ -10,7 +11,7 @@ const Events = ({ allEvents, onAdd, onEdit, onDelete }) => {
       element={
         <>
           <div className="table is-bordered is-striped is-narrow is-hoverable is-centered is-three-forths">
-            <table style={{ width: "100%", border: "1px solid black" }}>
+            <table style={{ width: "50%", border: "0px solid black" }}>
               <tbody>
                 <tr>
                   <th>Datum</th>
@@ -23,11 +24,25 @@ const Events = ({ allEvents, onAdd, onEdit, onDelete }) => {
                   <th>
                     <ClickDropdown
                       dropText="Event Toevogen"
-                      items={<EventForm onDelete={onDelete} onAdd={onAdd} onEdit={()=>(alert('Event cannot be changed if it hasnt been created first'))}/>}
+                      items={
+                        <EventForm
+                          onDelete={onDelete}
+                          onAdd={onAdd}
+                          onEdit={() =>
+                            alert(
+                              "Event cannot be changed if it hasnt been created first"
+                            )
+                          }
+                        />
+                      }
                     />
                   </th>
                 </tr>
-                {allEvents?.map((event) => (
+
+              </tbody>
+            </table>
+
+            {allEvents?.map((event) => (
                   <Event
                     key={event.id}
                     event={event}
@@ -36,8 +51,6 @@ const Events = ({ allEvents, onAdd, onEdit, onDelete }) => {
                     onDelete={onDelete}
                   />
                 ))}
-              </tbody>
-            </table>
           </div>
         </>
       }

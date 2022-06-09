@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import Button from "../global/Button";
+import Button from "../../global/Button";
 // import Page from "../Page";
 // import App from '../../App'
 
 const EventForm = ({ id, pastevent, onAdd, onEdit, onDelete }) => {
   const [deleted, setDeleted] = useState(false);
-  const [summary, setSummary] = useState(pastevent ? pastevent.summary : "Activiteit");
+  const [summary, setSummary] = useState(
+    pastevent ? pastevent.summary : "Activiteit"
+  );
   const [description, setDescription] = useState(
     pastevent ? pastevent.description : ""
   );
@@ -16,7 +18,9 @@ const EventForm = ({ id, pastevent, onAdd, onEdit, onDelete }) => {
     pastevent ? pastevent.start_time : "17:00"
   );
   const [end_date, setEnd_date] = useState(pastevent ? pastevent.end_date : "");
-  const [end_time, setEnd_time] = useState(pastevent ? pastevent.end_time : "23:59");
+  const [end_time, setEnd_time] = useState(
+    pastevent ? pastevent.end_time : "23:59"
+  );
   const [recuring, setRecuring] = useState(pastevent ? pastevent.recuring : "");
   const [location, setLocation] = useState(pastevent ? pastevent.location : "");
   const [kokers, setKokers] = useState(pastevent ? pastevent.kokers : []);
@@ -106,7 +110,7 @@ const EventForm = ({ id, pastevent, onAdd, onEdit, onDelete }) => {
   };
   return (
     <div className="column is-8">
-      <form className="add-form">
+      <form className="add-form" onSubmit={onSubmit}>
         <table>
           <tbody>
             <tr>
@@ -358,7 +362,14 @@ const EventForm = ({ id, pastevent, onAdd, onEdit, onDelete }) => {
         color="is-success"
         onClick={onSubmit}
       />
-      {pastevent && <Button type="delete" text="Delete" color="is-danger" onClick={Delete} />}
+      {pastevent && (
+        <Button
+          type="delete"
+          text="Delete"
+          color="is-danger"
+          onClick={Delete}
+        />
+      )}
     </div>
   );
 };

@@ -30,8 +30,19 @@ class EventSerializer(serializers.ModelSerializer):
 
 
 class NIEventSerializer(serializers.ModelSerializer):
+    # event = EventSerializer(many=False)
+    # lid = LidSerializer(many=False)
+
     class Meta:
         model = NIEvent
+        fields = "__all__"
+
+
+class DsaniSerializer(serializers.ModelSerializer):
+    dsani_ev = NIEventSerializer(many=True)
+
+    class Meta:
+        model = Event
         fields = "__all__"
 
 

@@ -49,9 +49,11 @@ class Event(models.Model):
     location = models.CharField(max_length=50, null=True, blank=True)
     kokers = models.ManyToManyField(Lid, blank=True, related_name="kookshift")
     kartrekkers = models.CharField(max_length=50, null=True, blank=True)
-    info = models.TextField( null=True, blank=True)
+    info = models.TextField(null=True, blank=True)
     budget = models.CharField(max_length=50, null=True, blank=True)
-    bijzonderheden = models.CharField(max_length=50, default = "Op Afmelding", choices = BIJZONDERHEIDEN)
+    bijzonderheden = models.CharField(
+        max_length=50, default="Op Afmelding", choices=BIJZONDERHEIDEN
+    )
     google_link = models.CharField(max_length=150, null=True, blank=True)
 
     def __str__(self):
@@ -75,4 +77,4 @@ class NIEvent(models.Model):
         return str(self.lid.initials) + ", " + str(self.event.description)
 
     class Meta:
-        ordering = ["lid"]
+        ordering = ["event"]
