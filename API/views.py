@@ -32,6 +32,7 @@ def getRoutes(request):
         {"GET": API_URL + "/lid/id"},
         {"POST": API_URL + "/lid/id"},
         {"GET": API_URL + "/events"},
+        {"GET": API_URL + "/dsani"},
         {"PUT": API_URL + "/event/id"},
         {"POST": API_URL + "/event"},
         {"POST": API_URL + "/addevents"},
@@ -159,8 +160,10 @@ def addEvents(request):
 
 @api_view(["GET"])
 def getDsaniS(request, pagenum=None):
-    if pagenum:events = paginateEvents(request, page=pagenum, results=20)
-    else: events= Event.objects.all()
+    if pagenum:
+        events = paginateEvents(request, page=pagenum, results=20)
+    else:
+        events = Event.objects.all()
     serializer = DsaniSerializer(events, many=True)
     return Response(serializer.data)
 
