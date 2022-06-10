@@ -25,6 +25,23 @@ from users.models import Lid
 API_URL = "/api"
 
 
+def ledenlist():
+    leden = {}
+    for lid in Lid.objects.all():
+        leden[lid.initials.lower()] = lid.id
+        leden[lid.name.lower()] = lid.id
+        try:
+            leden[lid.name.split()[0].lower()] = lid.id
+            leden[lid.initials.split()[1].lower()] = lid.id
+        except:
+            pass
+        try:
+            leden[lid.name.split()[1].lower()] = lid.id
+        except:
+            pass
+    return leden
+
+
 @api_view(["GET"])
 def getRoutes(request):
     routes = [
@@ -109,7 +126,7 @@ def deleteEvent(request, pk):
     return Response()
 
 
-@api_view(["PUT", "DELETE"])
+@api_view(["PUT"])
 # @permission_classes([IsAuthenticated])
 def editEvent(request, pk):
     data = request.data
@@ -151,6 +168,12 @@ def addEvents(request):
         budget=data["budget"] or "",
         bijzonderheden=data["bijzonderheden"] or "",
         # kokers=data["kokers"] or [],
+    )
+    leden = ledenlist()
+    event.kokers.set(
+        Lid.objects.get(id=leden[INITIALS.rstrip().lstrip().lower()])
+        for INITIALS in data["kokers"].split(",")
+        if INITIALS.rstrip().lstrip().lower() in leden.keys()
     )
     event.save()
     # print("saved")
