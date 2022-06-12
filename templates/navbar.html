@@ -59,7 +59,7 @@
           <span aria-haspopup="true" aria-controls="dropdown-menu4">
             <span><a>Development</a></span>
           </span>
-          <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+          {%if request.user|has_group:"Developer"%}<div class="dropdown-menu" id="dropdown-menu4" role="menu">
             <div class="dropdown-content">
               <div class="dropdown-item">
                 <li>
@@ -86,6 +86,7 @@
               </div>
             </div>
           </div>
+          {%endif%}
         </div>
       </div>
       <div class="column">

@@ -8,9 +8,11 @@ from .models import Decla, Stand
 # Create your views here.
 
 
+
 @login_required(login_url="login")
 def fileDecla(request):
     form = DeclaForm()
+    print(form)
     if request.method == "POST":
         form = DeclaForm(request.POST, request.FILES)
         if form.is_valid():

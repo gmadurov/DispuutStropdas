@@ -35,7 +35,7 @@ class Boekstuk(models.Model):
 
 class Decla(models.Model):
     # owner, event, content, total, present, senate_year, receipt, reunist, kmters, verwerkt
-    owner = models.ForeignKey(Lid,default=19900, on_delete=models.CASCADE)
+    owner = models.ForeignKey(Lid, default=19900, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.SET_NULL, null=True, blank=True)
     content = models.TextField(max_length=50)
     total = models.FloatField()

@@ -1,15 +1,19 @@
 # Create your views here.
 
 
-from datetime import datetime, date, time
 import doctest
+from datetime import date, datetime, time
+
+from agenda.models import AgendaClient, Event, NIEvent
 from django.http import JsonResponse
-from .utils import future_events, paginateEvents, searchEvents
+from documents.models import Document
 from finance.models import Decla
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from users.forms import LidForm
+from users.models import Lid
+
 from .serializers import (
     DeclaSerializer,
     DocumentSerializer,
@@ -18,11 +22,20 @@ from .serializers import (
     LidSerializer,
     NIEventSerializer,
 )
-from documents.models import Document
-from agenda.models import AgendaClient, Event, NIEvent
-from users.models import Lid
+from .utils import future_events, paginateEvents, searchEvents
 
 API_URL = "/api/"
+
+
+def senate_jaar():
+    date = datetime.today()
+    month = int(date.strftime("%m"))
+    year = int(date.strftime("%Y")) - 1990
+    if month >= 9:
+        out = year + 1
+    else:
+        out = year
+    return out
 
 
 def ledenlist():
@@ -58,12 +71,14 @@ def getRoutes(request):
         {"GET": API_URL + "dsani/id"},
         {"GET": API_URL + "users/token/"},
         {"GET": API_URL + "users/token/refresh/"},
-        # {"POST": API_URL + "/event/id"},
-        # {"POST": API_URL + "/NIEvent/id"},
-        # {"GET": API_URL + "/NIEvent/lid_id/nievent_id"},
-        # {"GET": API_URL + "/NIEvents"},
-        # {"GET": API_URL + "/documents"},
-        # {"POST": API_URL + "/decla"},
+        # {"POST": API_URL + "event/id"},
+        # {"POST": API_URL + "NIEvent/id"},
+        # {"GET": API_URL + "NIEvent/lid_id/nievent_id"},
+        # {"GET": API_URL + "NIEvents"},
+        # {"GET": API_URL + "documents"},
+        {"GET": API_URL + "decla/"},
+        {"POST": API_URL + "decla/"},
+        {"GET": API_URL + "decla/id"},
         # {'GET': API_URL+'/document/id'},
         # {"POST": API_URL + "/add_document"},
     ]
@@ -199,6 +214,33 @@ def getDsani(request, nievent_id):
         return Response(serializer.data)
 
 
+@api_view(["GET", "POST"])
+def getDeclas(request):
+    if request.method == "GET":
+        events = Decla.objects.all()
+        serializer = DeclaSerializer(events, many=True)
+        return Response(serializer.data)
+    if request.method == "POST":
+        data = request.data
+        print(data)
+        decla = Decla.objects.create(
+            owner=Lid.objects.get(id=data["owner"]),
+            event=Event.objects.get(id=data["event"]),
+            content=data["content"] or None,
+            total=data["total"] or None,
+            # present=data["present"],
+            senate_year=senate_jaar(),
+            receipt=data["receipt"] or None,
+            reunist=data["reunist"] or None,
+            kmters=data["kmters"] or 0,
+            verwerkt=data["verwerkt"] or False,
+        )
+        if data["present"]:
+            decla.present.set([Lid.objects.get(id=lid) for lid in data["present"]])
+        decla.save()
+        serializer = DeclaSerializer(decla, many=False)
+        return Response(serializer.data)
+
 
 @api_view(["GET"])
 def getDecla(request, decla_id):
@@ -207,25 +249,25 @@ def getDecla(request, decla_id):
     return Response(serializer.data)
 
 
-@api_view(["POST"])
-def makeDecla(request):
-    data = request.data
-    print(data)
-    decla = Decla.objects.create(
-        owner=Lid.objects.get(id=data["owner"]),
-        event=Event.objects.get(id=data["event"]),
-        content=data["content"] or None,
-        total=data["total"] or None,
-        present=data["present"],
-        senate_year=data["senate_year"] or None,
-        receipt=data["receipt"] or None,
-        reunist=data["reunist"] or None,
-        kmters=data["kmters"] or None,
-        verwerkt=data["verwerkt"] or None,
-    )
-    decla.save()
-    serializer = DeclaSerializer(decla, many=False)
-    return Response(serializer.data)
+# @api_view(["POST"])
+# def makeDecla(request):
+#     data = request.data
+#     print(data)
+#     decla = Decla.objects.create(
+#         owner=Lid.objects.get(id=data["owner"]),
+#         event=Event.objects.get(id=data["event"]),
+#         content=data["content"] or None,
+#         total=data["total"] or None,
+#         present=data["present"],
+#         senate_year=data["senate_year"] or None,
+#         receipt=data["receipt"] or None,
+#         reunist=data["reunist"] or None,
+#         kmters=data["kmters"] or None,
+#         verwerkt=data["verwerkt"] or None,
+#     )
+#     decla.save()
+#     serializer = DeclaSerializer(decla, many=False)
+#     return Response(serializer.data)
 
 
 @api_view(["POST"])
