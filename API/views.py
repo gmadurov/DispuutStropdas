@@ -22,7 +22,7 @@ from documents.models import Document
 from agenda.models import AgendaClient, Event, NIEvent
 from users.models import Lid
 
-API_URL = "/api"
+API_URL = "/api/"
 
 
 def ledenlist():
@@ -45,14 +45,19 @@ def ledenlist():
 @api_view(["GET"])
 def getRoutes(request):
     routes = [
-        {"GET": API_URL + "/leden"},
-        {"GET": API_URL + "/lid/id"},
-        {"POST": API_URL + "/lid/id"},
-        {"GET": API_URL + "/events"},
-        {"GET": API_URL + "/dsani"},
-        {"PUT": API_URL + "/event/id"},
-        {"POST": API_URL + "/event"},
-        {"POST": API_URL + "/addevents"},
+        {"GET": API_URL + "leden/"},
+        {"GET": API_URL + "leden/id"},
+        # {"PUT": API_URL + "leden/id"},
+        {"GET": API_URL + "events/"},
+        {"POST": API_URL + "events/"},
+        {"GET": API_URL + "events/id"},
+        {"PUT": API_URL + "events/id"},
+        {"DELETE": API_URL + "events/id"},
+        {"GET": API_URL + "dsani/"},
+        {"GET": API_URL + "dsani/pages/<int:pagenum>"},
+        {"GET": API_URL + "dsani/id"},
+        {"GET": API_URL + "users/token/"},
+        {"GET": API_URL + "users/token/refresh/"},
         # {"POST": API_URL + "/event/id"},
         # {"POST": API_URL + "/NIEvent/id"},
         # {"GET": API_URL + "/NIEvent/lid_id/nievent_id"},
@@ -102,87 +107,75 @@ def getDocuments(request):
     return Response(serializer.data)
 
 
-@api_view(["GET"])
+# path("events/", views.getEvents),
+@api_view(["GET", "POST"])
 # @permission_classes([IsAuthenticated])
 def getEvents(request):
-    events = Event.objects.all()
-    serializer = EventSerializer(events, many=True)
-    return Response(serializer.data)
+    if request.method == "GET":
+        events = Event.objects.all()
+        serializer = EventSerializer(events, many=True)
+        return Response(serializer.data)
+    if request.method == "POST":
+        data = request.data
+        event = Event.objects.create(
+            summary=data["summary"] or "",
+            description=data["description"] or "",
+            start_date=date.fromisoformat(data["start_date"]) or "",
+            start_time=time.fromisoformat(data["start_time"]) or "",
+            end_date=date.fromisoformat(data["end_date"]) or "",
+            end_time=time.fromisoformat(data["end_time"]) or "",
+            recuring=data["recuring"] or "",
+            location=data["location"] or "",
+            kartrekkers=data["kartrekkers"] or "",
+            info=data["info"] or "",
+            budget=data["budget"] or "",
+            bijzonderheden=data["bijzonderheden"] or "",
+            # kokers=data["kokers"] or [],
+        )
+        if data["kokers"]:
+            event.kokers.set([Lid.objects.get(id=lid) for lid in data["kokers"]])
+        event.save()
+        serializer = EventSerializer(event, many=False)
+        return Response(serializer.data)
 
 
-@api_view(["GET"])
+# path("events/<str:pk>", views.getEvent),
+@api_view(["GET", "PUT", "DELETE"])
 # @permission_classes([IsAuthenticated])
 def getEvent(request, pk):
-    event = Event.objects.get(id=pk)
-    serializer = EventSerializer(event, many=False)
-    return Response(serializer.data)
+    if request.method == "GET":
+        event = Event.objects.get(id=pk)
+        serializer = EventSerializer(event, many=False)
+        return Response(serializer.data)
+    if request.method == "PUT":
+        data = request.data
+        event = Event.objects.get(id=pk)
+        event.summary = data["summary"] or ""
+        event.description = data["description"] or ""
+        event.start_date = date.fromisoformat(data["start_date"]) or ""
+        event.start_time = time.fromisoformat(data["start_time"]) or ""
+        event.end_date = date.fromisoformat(data["end_date"]) or ""
+        event.end_time = time.fromisoformat(data["end_time"]) or ""
+        event.recuring = data["recuring"] or ""
+        event.location = data["location"] or ""
+        event.kartrekkers = data["kartrekkers"] or ""
+        event.info = data["info"] or ""
+        event.budget = data["budget"] or ""
+        event.bijzonderheden = data["bijzonderheden"] or ""
+        if data["kokers"]:
+            event.kokers.set([Lid.objects.get(id=lid) for lid in data["kokers"]])
 
-
-@api_view(["DELETE"])
-# @permission_classes([IsAuthenticated])
-def deleteEvent(request, pk):
-    event = Event.objects.get(id=pk).delete()
-    # serializer = EventSerializer(event, many=False)
-    return Response()
-
-
-@api_view(["PUT"])
-# @permission_classes([IsAuthenticated])
-def editEvent(request, pk):
-    data = request.data
-    event = Event.objects.get(id=pk)
-    event.summary = data["summary"] or ""
-    event.description = data["description"] or ""
-    event.start_date = date.fromisoformat(data["start_date"]) or ""
-    event.start_time = time.fromisoformat(data["start_time"]) or ""
-    event.end_date = date.fromisoformat(data["end_date"]) or ""
-    event.end_time = time.fromisoformat(data["end_time"]) or ""
-    event.recuring = data["recuring"] or ""
-    event.location = data["location"] or ""
-    event.kartrekkers = data["kartrekkers"] or ""
-    event.info = data["info"] or ""
-    event.budget = data["budget"] or ""
-    event.bijzonderheden = data["bijzonderheden"] or ""
-    kokers = set(data["kokers"])
-
-    event.save()
-    serializer = EventSerializer(event, many=False)
-    return Response(serializer.data)
-
-
-@api_view(["POST", "GET", "PUT", "DELETE"])
-# @permission_classes([IsAuthenticated])
-def addEvents(request):
-    data = request.data
-    event = Event.objects.create(
-        summary=data["summary"] or "",
-        description=data["description"] or "",
-        start_date=date.fromisoformat(data["start_date"]) or "",
-        start_time=time.fromisoformat(data["start_time"]) or "",
-        end_date=date.fromisoformat(data["end_date"]) or "",
-        end_time=time.fromisoformat(data["end_time"]) or "",
-        recuring=data["recuring"] or "",
-        location=data["location"] or "",
-        kartrekkers=data["kartrekkers"] or "",
-        info=data["info"] or "",
-        budget=data["budget"] or "",
-        bijzonderheden=data["bijzonderheden"] or "",
-        # kokers=data["kokers"] or [],
-    )
-    leden = ledenlist()
-    event.kokers.set(
-        Lid.objects.get(id=leden[INITIALS.rstrip().lstrip().lower()])
-        for INITIALS in data["kokers"].split(",")
-        if INITIALS.rstrip().lstrip().lower() in leden.keys()
-    )
-    event.save()
-    # print("saved")
-    serializer = EventSerializer(event, many=False)
-    return Response(serializer.data)
+        event.save()
+        serializer = EventSerializer(instance=event)
+        return Response(serializer.data)
+    if request.method == "DELETE":
+        event = Event.objects.get(id=pk).delete()
+        # serializer = EventSerializer(event, many=False)
+        return Response()
 
 
 @api_view(["GET"])
-def getDsaniS(request, pagenum=None):
+def Dsani(request, pagenum=None):
     if pagenum:
         events = paginateEvents(request, page=pagenum, results=20)
     else:
@@ -191,27 +184,20 @@ def getDsaniS(request, pagenum=None):
     return Response(serializer.data)
 
 
-@api_view(["GET"])
+@api_view(["GET", "PUT"])
 def getDsani(request, nievent_id):
-    events = NIEvent.objects.get(id=nievent_id)
-    serializer = NIEventSerializer(events, many=True)
-    return Response(serializer.data)
+    if request.method == "GET":
+        events = NIEvent.objects.get(id=nievent_id)
+        serializer = NIEventSerializer(events, many=True)
+        return Response(serializer.data)
+    if request.method == "PUT":
+        event = NIEvent.objects.get(id=nievent_id)
+        event.note = request.data["note"]
+        event.points = request.data["points"]
+        event.save()
+        serializer = NIEventSerializer(event, many=False)
+        return Response(serializer.data)
 
-
-@api_view(["PUT"])
-def editDsani(request, nievent_id):
-    event = NIEvent.objects.get(id=nievent_id)
-    event.note = request.data["note"]
-    event.points = request.data["points"]
-    event.save()
-    serializer = NIEventSerializer(event, many=False)
-    return Response(serializer.data)
-
-
-@api_view(["DELETE"])
-def deleteDsani(request, nievent_id):
-    events = NIEvent.objects.get(id=nievent_id).delete()
-    return Response()
 
 
 @api_view(["GET"])

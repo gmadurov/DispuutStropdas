@@ -29,10 +29,10 @@ if os.getcwd() == path:
     # set to false before uploading
     setURL()
     # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = True
+    DEBUG = True if os.environ.get("DEBUG") == 'True' else False
     LOCAL = True
 else:
-    DEBUG = False
+    DEBUG = True if os.environ.get("DEBUG") == 'True' else False
     LOCAL = False
 
 # SECURITY WARNING: keep the secret key used in production secret!

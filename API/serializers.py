@@ -40,7 +40,6 @@ class NIEventSerializer(serializers.ModelSerializer):
 
 class DsaniSerializer(serializers.ModelSerializer):
     dsani_ev = NIEventSerializer(many=True)
-
     class Meta:
         model = Event
         fields = "__all__"
