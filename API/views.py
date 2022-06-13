@@ -228,7 +228,6 @@ def getDeclas(request):
             event=Event.objects.get(id=data["event"]),
             content=data["content"] or None,
             total=data["total"] or None,
-            # present=data["present"],
             senate_year=senate_jaar(),
             receipt=data["receipt"] or None,
             reunist=data["reunist"] or None,
