@@ -222,7 +222,7 @@ def getDeclas(request):
         return Response(serializer.data)
     if request.method == "POST":
         data = request.data
-        print(data)
+        # print(data)
         decla = Decla.objects.create(
             owner=Lid.objects.get(id=data["owner"]),
             event=Event.objects.get(id=data["event"]),
