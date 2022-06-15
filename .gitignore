@@ -1,7 +1,6 @@
 environment/
 .vscode/
+templates/
 django-google*
 gitlab*
 db*
-pipfile*
-Pipfile.lock*

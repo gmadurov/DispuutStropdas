@@ -24,7 +24,7 @@ def senate_jaar():
 
 
 class Boekstuk(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, unique=True)
 
     def __str__(self):
         return str(self.name)

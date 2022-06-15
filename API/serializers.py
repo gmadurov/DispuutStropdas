@@ -1,6 +1,6 @@
 from agenda.models import AgendaClient, Event, NIEvent
 from documents.models import Document
-from finance.models import Decla
+from finance.models import Boekstuk, Decla
 from rest_framework import serializers
 from users.models import Lid
 
@@ -17,15 +17,21 @@ class LidSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class DeclaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Decla
-        fields = "__all__"
-
-
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
+        fields = "__all__"
+
+
+class DeclaSerializer(serializers.ModelSerializer):
+    event = EventSerializer()
+
+    class Meta:
+        model = Decla
+        fields = "__all__"
+class BoekstukSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Boekstuk
         fields = "__all__"
 
 
@@ -40,6 +46,7 @@ class NIEventSerializer(serializers.ModelSerializer):
 
 class DsaniSerializer(serializers.ModelSerializer):
     dsani_ev = NIEventSerializer(many=True)
+
     class Meta:
         model = Event
         fields = "__all__"

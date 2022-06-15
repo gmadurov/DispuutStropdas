@@ -12,6 +12,7 @@ urlpatterns = [
     path("leden/<str:pk>", views.getLid),
     #########
     path("documents/", views.getDocuments),
+    path("boekstuken/", views.boekstuken),
     path("decla/", views.getDeclas),
     path("decla/<str:decla_id>", views.getDecla),
     path("add_document/", views.add_Document),

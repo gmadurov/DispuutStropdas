@@ -7,7 +7,7 @@ from datetime import date, datetime, time
 from agenda.models import AgendaClient, Event, NIEvent
 from django.http import JsonResponse
 from documents.models import Document
-from finance.models import Decla
+from finance.models import Boekstuk, Decla
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -15,6 +15,7 @@ from users.forms import LidForm
 from users.models import Lid
 
 from .serializers import (
+    BoekstukSerializer,
     DeclaSerializer,
     DocumentSerializer,
     DsaniSerializer,
@@ -135,10 +136,14 @@ def getEvents(request):
         event = Event.objects.create(
             summary=data["summary"] or "",
             description=data["description"] or "",
-            start_date=date.fromisoformat(data["start_date"]) or "",
-            start_time=time.fromisoformat(data["start_time"]) or "",
-            end_date=date.fromisoformat(data["end_date"]) or "",
-            end_time=time.fromisoformat(data["end_time"]) or "",
+            start_date=date.fromisoformat(
+                data["start_date"] or date.today().isoformat()
+            )
+            or date.today(),
+            start_time=time.fromisoformat(data["start_time"]),
+            end_date=date.fromisoformat(data["end_date"] or date.today().isoformat())
+            or date.today(),
+            end_time=time.fromisoformat(data["end_time"]),
             recuring=data["recuring"] or "",
             location=data["location"] or "",
             kartrekkers=data["kartrekkers"] or "",
@@ -199,6 +204,19 @@ def Dsani(request, pagenum=None):
     return Response(serializer.data)
 
 
+@api_view(["GET", "POST"])
+def boekstuken(request):
+    if request.method == "GET":
+        bookstuk = Boekstuk.objects.all()
+        serializer = BoekstukSerializer(bookstuk, many=True)
+        return Response(serializer.data)
+    if request.method == "POST":
+        print(request.data)
+        bookstuk = Boekstuk.objects.create(name=request.data["name"])
+        serializer = BoekstukSerializer(bookstuk, many=False)
+        return Response(serializer.data)
+
+
 @api_view(["GET", "PUT"])
 def getDsani(request, nievent_id):
     if request.method == "GET":
@@ -222,17 +240,17 @@ def getDeclas(request):
         return Response(serializer.data)
     if request.method == "POST":
         data = request.data
-        # print(data)
         decla = Decla.objects.create(
             owner=Lid.objects.get(id=data["owner"]),
             event=Event.objects.get(id=data["event"]),
-            content=data["content"] or None,
-            total=data["total"] or None,
+            content=data["content"] or "",
+            total=data["total"] or 0,
             senate_year=senate_jaar(),
             receipt=data["receipt"] or None,
-            reunist=data["reunist"] or None,
+            reunist=data["reunist"] or 0,
             kmters=data["kmters"] or 0,
             verwerkt=data["verwerkt"] or False,
+            boekstuk=Boekstuk.objects.get(id=data["boekstuk"]),
         )
         if data["present"]:
             decla.present.set([Lid.objects.get(id=lid) for lid in data["present"]])
@@ -241,11 +259,39 @@ def getDeclas(request):
         return Response(serializer.data)
 
 
-@api_view(["GET"])
+@api_view(["GET", "PUT", "DELETE"])
 def getDecla(request, decla_id):
-    events = Decla.objects.get(id=decla_id)
-    serializer = DeclaSerializer(events, many=False)
-    return Response(serializer.data)
+    decla = Decla.objects.get(id=decla_id)
+    if request.method == "GET":
+        serializer = DeclaSerializer(decla, many=False)
+        return Response(serializer.data)
+
+    if request.method == "PUT":
+        data = request.data
+        print(data)
+        decla.event = Event.objects.get(id=data["event"] or decla.event.id)
+        decla.content = data["content"] or decla.content
+        decla.total = data["total"] or decla.total
+        decla.senate_year = senate_jaar() or decla.senate_year
+        decla.receipt = data["receipt"] or decla.receipt
+        decla.reunist = data["reunist"] or decla.reunist
+        decla.kmters = data["kmters"] or decla.kmters
+        decla.verwerkt = data["verwerkt"] or False
+
+        if "boekstuk" in data.keys():
+            if data["boekstuk"] != None:
+                decla.boekstuk = (
+                    Boekstuk.objects.get(id=data["boekstuk"]) or decla.boekstuk
+                )
+        if "present" in data.keys():
+            decla.present.set([Lid.objects.get(id=lid) for lid in data["present"]])
+        decla.save()
+        serializer = DeclaSerializer(decla, many=False)
+        return Response(serializer.data)
+    if request.method == "DELETE":
+        serializer = DeclaSerializer(decla, many=False)
+        return Response(serializer.data)
+        decla.delete()
 
 
 # @api_view(["POST"])

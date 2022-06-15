@@ -19,16 +19,21 @@ from django.shortcuts import render
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
 
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path("admin/", admin.site.urls, name="admin1"),
     # path('links/', include('links.urls')),
-    path("", include("users.urls")),
-    path("", include("agenda.urls")),
-    path("", include("documents.urls")),
-    path("", include("finance.urls")),
+    path("", TemplateView.as_view(template_name="index.html")),
+    path("declas/", TemplateView.as_view(template_name="index.html")),
+    path("decla/<str:pk>", TemplateView.as_view(template_name="index.html")),
+    path("agenda/", TemplateView.as_view(template_name="index.html")),
+    path("site/", include("users.urls")),
+    path("site/", include("agenda.urls")),
+    path("site/", include("documents.urls")),
+    path("site/", include("finance.urls")),
     path("api/", include("API.urls")),
     # path('accounts/', include('allauth.urls')),
     path(
@@ -69,13 +74,13 @@ from .settings import path as pa
 if os.getcwd() == pa:
     from environment.start_up_db import *
 
-    urlpatterns.append(path("start_events/", startEVENTS, name = 'start_event'))
-    urlpatterns.append(path("start_leden/", startLEDEN, name = 'start_leden'))
-    urlpatterns.append(path("start_decla/", startDECLA, name = 'start_decla'))
-    urlpatterns.append(path("start_all/", start_all, name = 'start_all'))
-    urlpatterns.append(path("delete_event/", deleteEVENTS, name = 'delete_event'))
-    urlpatterns.append(path("delete_leden/", deleteLEDEN, name = 'delete_leden'))
-    urlpatterns.append(path("delete_decla/", deleteDECLA, name = 'delete_decla'))
+    urlpatterns.append(path("start_events/", startEVENTS, name="start_event"))
+    urlpatterns.append(path("start_leden/", startLEDEN, name="start_leden"))
+    urlpatterns.append(path("start_decla/", startDECLA, name="start_decla"))
+    urlpatterns.append(path("start_all/", start_all, name="start_all"))
+    urlpatterns.append(path("delete_event/", deleteEVENTS, name="delete_event"))
+    urlpatterns.append(path("delete_leden/", deleteLEDEN, name="delete_leden"))
+    urlpatterns.append(path("delete_decla/", deleteDECLA, name="delete_decla"))
 
 
 # 1 - User submits email for reset              //PasswordResetView.as_view()           //name="reset_password"
