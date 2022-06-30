@@ -1,9 +1,11 @@
 from django.urls import path
+
+from API.tokens import MyTokenObtainPairView
 from . import views
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+# from rest_framework_simplejwt.views import (
+#     TokenObtainPairView,
+#     TokenRefreshView,
+# )
 
 urlpatterns = [
     path("", views.getRoutes),
@@ -29,7 +31,7 @@ urlpatterns = [
     # path("edit-dsani/<str:nievent_id>", views.editDsani),
     # path("delete-dsani/<str:nievent_id>", views.deleteDsani),
     ###
-    path("users/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("users/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("users/token/", MyTokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("users/token/refresh/", MyTokenObtainPairView.as_view(), name="token_refresh"),
     ####
 ]

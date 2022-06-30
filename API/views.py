@@ -1,7 +1,6 @@
 # Create your views here.
 
 
-import doctest
 from datetime import date, datetime, time
 
 from agenda.models import AgendaClient, Event, NIEvent
@@ -240,6 +239,8 @@ def getDeclas(request):
         return Response(serializer.data)
     if request.method == "POST":
         data = request.data
+        print(request)
+        print(data)
         decla = Decla.objects.create(
             owner=Lid.objects.get(id=data["owner"]),
             event=Event.objects.get(id=data["event"]),
@@ -262,36 +263,40 @@ def getDeclas(request):
 @api_view(["GET", "PUT", "DELETE"])
 def getDecla(request, decla_id):
     decla = Decla.objects.get(id=decla_id)
-    if request.method == "GET":
-        serializer = DeclaSerializer(decla, many=False)
-        return Response(serializer.data)
+    try:
+        if request.method == "GET":
+            serializer = DeclaSerializer(decla, many=False)
+            return Response(serializer.data)
 
-    if request.method == "PUT":
-        data = request.data
-        print(data)
-        decla.event = Event.objects.get(id=data["event"] or decla.event.id)
-        decla.content = data["content"] or decla.content
-        decla.total = data["total"] or decla.total
-        decla.senate_year = senate_jaar() or decla.senate_year
-        decla.receipt = data["receipt"] or decla.receipt
-        decla.reunist = data["reunist"] or decla.reunist
-        decla.kmters = data["kmters"] or decla.kmters
-        decla.verwerkt = data["verwerkt"] or False
+        if request.method == "PUT":
+            
+            data = request.data
+            print(data)
+            decla.event = Event.objects.get(id=data["event"])
+            decla.content = data["content"] or decla.content
+            decla.total = data["total"] or decla.total
+            decla.senate_year = senate_jaar() or decla.senate_year
+            decla.receipt = data["receipt"] or decla.receipt
+            decla.reunist = data["reunist"] or decla.reunist
+            decla.kmters = data["kmters"] or decla.kmters
+            decla.verwerkt = data["verwerkt"] or False
 
-        if "boekstuk" in data.keys():
-            if data["boekstuk"] != None:
-                decla.boekstuk = (
-                    Boekstuk.objects.get(id=data["boekstuk"]) or decla.boekstuk
-                )
-        if "present" in data.keys():
-            decla.present.set([Lid.objects.get(id=lid) for lid in data["present"]])
-        decla.save()
-        serializer = DeclaSerializer(decla, many=False)
-        return Response(serializer.data)
-    if request.method == "DELETE":
-        serializer = DeclaSerializer(decla, many=False)
-        return Response(serializer.data)
-        decla.delete()
+            if "boekstuk" in data.keys():
+                if data["boekstuk"] != None:
+                    decla.boekstuk = (
+                        Boekstuk.objects.get(id=data["boekstuk"]) or decla.boekstuk
+                    )
+            if "present" in data.keys():
+                decla.present.set([Lid.objects.get(id=lid) for lid in data["present"]])
+            decla.save()
+            serializer = DeclaSerializer(decla, many=False)
+            return Response(serializer.data)
+        if request.method == "DELETE":
+            serializer = DeclaSerializer(decla, many=False)
+            decla.delete()
+            return Response(serializer.data)
+    except Exception as e:
+        print(e)
 
 
 # @api_view(["POST"])
