@@ -86,15 +86,17 @@ def getRoutes(request):
 
 
 @api_view(["GET"])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getLeden(request):
+    # try: print(request.user.lid)
+    # except: pass
     leden = Lid.objects.filter(active=True)
     serializer = LidSerializer(leden, many=True)
     return Response(serializer.data)
 
 
 @api_view(["GET"])
-# @permission_classes([IsAuthenticated]), "POST"
+@permission_classes([IsAuthenticated]) #, "POST"
 def getLid(request, pk):
     lid = Lid.objects.get(id=pk)
     serializer = LidSerializer(lid, many=False)
@@ -114,7 +116,7 @@ def getLid(request, pk):
 
 
 @api_view(["GET"])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getDocuments(request):
     docs = Document.objects.all()
     serializer = DocumentSerializer(docs, many=True)
@@ -124,7 +126,7 @@ def getDocuments(request):
 
 # path("events/", views.getEvents),
 @api_view(["GET", "POST"])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getEvents(request):
     if request.method == "GET":
         events = Event.objects.all()
@@ -160,7 +162,7 @@ def getEvents(request):
 
 # path("events/<str:pk>", views.getEvent),
 @api_view(["GET", "PUT", "DELETE"])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getEvent(request, pk):
     if request.method == "GET":
         event = Event.objects.get(id=pk)
@@ -194,6 +196,7 @@ def getEvent(request, pk):
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def Dsani(request, pagenum=None):
     if pagenum:
         events = paginateEvents(request, page=pagenum, results=20)
@@ -204,6 +207,7 @@ def Dsani(request, pagenum=None):
 
 
 @api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated])
 def boekstuken(request):
     if request.method == "GET":
         bookstuk = Boekstuk.objects.all()
@@ -217,6 +221,7 @@ def boekstuken(request):
 
 
 @api_view(["GET", "PUT"])
+@permission_classes([IsAuthenticated])
 def getDsani(request, nievent_id):
     if request.method == "GET":
         events = NIEvent.objects.get(id=nievent_id)
@@ -232,6 +237,7 @@ def getDsani(request, nievent_id):
 
 
 @api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated])
 def getDeclas(request):
     if request.method == "GET":
         events = Decla.objects.all()
@@ -239,7 +245,7 @@ def getDeclas(request):
         return Response(serializer.data)
     if request.method == "POST":
         data = request.data
-        print(request)
+        print(request.user)
         print(data)
         decla = Decla.objects.create(
             owner=Lid.objects.get(id=data["owner"]),
@@ -253,14 +259,18 @@ def getDeclas(request):
             verwerkt=data["verwerkt"] or False,
             boekstuk=Boekstuk.objects.get(id=data["boekstuk"]),
         )
-        if data["present"]:
-            decla.present.set([Lid.objects.get(id=lid) for lid in data["present"]])
+        if "present" in data.keys():
+            decla.present.set(
+                [Lid.objects.get(id=lid) for lid in data["present"].split(",")]
+            )
+        # print(10)
         decla.save()
         serializer = DeclaSerializer(decla, many=False)
         return Response(serializer.data)
 
 
 @api_view(["GET", "PUT", "DELETE"])
+@permission_classes([IsAuthenticated])
 def getDecla(request, decla_id):
     decla = Decla.objects.get(id=decla_id)
     try:
@@ -269,25 +279,44 @@ def getDecla(request, decla_id):
             return Response(serializer.data)
 
         if request.method == "PUT":
-            
+
             data = request.data
             print(data)
-            decla.event = Event.objects.get(id=data["event"])
-            decla.content = data["content"] or decla.content
-            decla.total = data["total"] or decla.total
+            # print(1)
+            if "event" in data.keys():
+                decla.event = Event.objects.get(id=data["event"])
+            # print(2)
+            if "content" in data.keys():
+                decla.content = data["content"] or decla.content
+            # print(3)
+            if "total" in data.keys():
+                decla.total = data["total"] or decla.total
+            # print(4)
             decla.senate_year = senate_jaar() or decla.senate_year
-            decla.receipt = data["receipt"] or decla.receipt
-            decla.reunist = data["reunist"] or decla.reunist
-            decla.kmters = data["kmters"] or decla.kmters
-            decla.verwerkt = data["verwerkt"] or False
-
+            # print(5)
+            if "reunist" in data.keys():
+                decla.reunist = data["reunist"] or decla.reunist
+            # print(5)
+            if "kmters" in data.keys():
+                decla.kmters = data["kmters"] or decla.kmters
+            # print(6)
+            if "verwerkt" in data.keys():
+                decla.verwerkt = data["verwerkt"] or False
+            # print(7)
+            if "receipt" in data.keys():
+                decla.receipt = data["receipt"] or decla.receipt
+            # print(8)
             if "boekstuk" in data.keys():
                 if data["boekstuk"] != None:
                     decla.boekstuk = (
                         Boekstuk.objects.get(id=data["boekstuk"]) or decla.boekstuk
                     )
+            # print(9)
             if "present" in data.keys():
-                decla.present.set([Lid.objects.get(id=lid) for lid in data["present"]])
+                decla.present.set(
+                    [Lid.objects.get(id=lid) for lid in data["present"].split(",")]
+                )
+            # print(10)
             decla.save()
             serializer = DeclaSerializer(decla, many=False)
             return Response(serializer.data)
@@ -318,24 +347,6 @@ def getDecla(request, decla_id):
 #     decla.save()
 #     serializer = DeclaSerializer(decla, many=False)
 #     return Response(serializer.data)
-
-
-@api_view(["POST"])
-# @permission_classes([IsAuthenticated])
-def NI_points(request, lid_id, nievent_id):
-    event = Event.objects.get(id=nievent_id)
-    user = Lid.objects.get(id=lid_id)
-    data = request.data
-    points, created = NIEvent.objects.get_or_create(
-        event=event,
-        lid=user,
-    )
-    points.points = data["value"]
-    points.note = data["note"]
-
-    points.save()
-    serializer = NIEventSerializer(points, many=False)
-    return Response(serializer.data)
 
 
 @api_view(["POST"])
