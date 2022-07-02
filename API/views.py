@@ -96,7 +96,7 @@ def getLeden(request):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated]) #, "POST"
+@permission_classes([IsAuthenticated])  # , "POST"
 def getLid(request, pk):
     lid = Lid.objects.get(id=pk)
     serializer = LidSerializer(lid, many=False)
@@ -281,42 +281,47 @@ def getDecla(request, decla_id):
         if request.method == "PUT":
 
             data = request.data
-            print(data)
-            # print(1)
+            # print(data)
+
             if "event" in data.keys():
-                decla.event = Event.objects.get(id=data["event"])
-            # print(2)
-            if "content" in data.keys():
-                decla.content = data["content"] or decla.content
-            # print(3)
-            if "total" in data.keys():
-                decla.total = data["total"] or decla.total
-            # print(4)
+                decla.event = (
+                    Event.objects.get(id=data["event"]["id"])
+                    if type(data["event"]) == dict
+                    else Event.objects.get(id=data["event"])
+                )
+            # print(1)
+            # print("content")
+            decla.content = (
+                data["content"] if "content" in data.keys() else decla.content
+            )
+            # print("total")
+            decla.total = data["total"] if "total" in data.keys() else decla.total
+            # print("senate_year")
             decla.senate_year = senate_jaar() or decla.senate_year
-            # print(5)
-            if "reunist" in data.keys():
-                decla.reunist = data["reunist"] or decla.reunist
-            # print(5)
-            if "kmters" in data.keys():
-                decla.kmters = data["kmters"] or decla.kmters
-            # print(6)
-            if "verwerkt" in data.keys():
-                decla.verwerkt = data["verwerkt"] or False
-            # print(7)
+            # print("reunist")
+            decla.reunist = (
+                data["reunist"] if "reunist" in data.keys() else decla.reunist
+            )
+            # print("kmters")
+            decla.kmters = data["kmters"] if "kmters" in data.keys() else decla.kmters
+            # print("verwerkt")
+            decla.verwerkt = (
+                True
+                if data["verwerkt"] == "true" and "verwerkt" in data.keys()
+                else False
+            )
+            # print("receipt")
             if "receipt" in data.keys():
                 decla.receipt = data["receipt"] or decla.receipt
-            # print(8)
             if "boekstuk" in data.keys():
                 if data["boekstuk"] != None:
                     decla.boekstuk = (
                         Boekstuk.objects.get(id=data["boekstuk"]) or decla.boekstuk
                     )
-            # print(9)
             if "present" in data.keys():
                 decla.present.set(
-                    [Lid.objects.get(id=lid) for lid in data["present"].split(",")]
+                    [Lid.objects.get(id=int(lid)) for lid in data["present"].split(",") if lid != '']
                 )
-            # print(10)
             decla.save()
             serializer = DeclaSerializer(decla, many=False)
             return Response(serializer.data)

@@ -31,7 +31,7 @@ if os.getcwd() == path:
     setURL()
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = True if os.environ.get("DEBUG") == "True" else False
-    LOCAL = False
+    LOCAL = True
 else:
     DEBUG = True if os.environ.get("DEBUG") == "True" else False
     LOCAL = False
@@ -96,7 +96,7 @@ REST_FRAMEWORK = {
 }
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=90),
+    "REFRESH_TOKEN_LIFETIME": timedelta(minutes=90),
     "ROTATE_REFRESH_TOKENS": True,  # hard authentication
     "BLACKLIST_AFTER_ROTATION": True,  # harder authentication
     "UPDATE_LAST_LOGIN": False,
