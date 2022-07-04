@@ -1,0 +1,20 @@
+{% extends 'main.html'%} {% block content%}
+
+<!-- Main Section -->
+<main class="lid my-md">
+  <div class="container">
+    <div class="layout">
+      <div class="column column--1of3">
+        <div class="card text-center">
+          <div class="card__body dev">
+            <img class="avatar avatar--xl" src="{{lid.imageURL}}" />
+            <h2 class="dev__name">{{lid.name}}</h2>
+            <p class="dev__title">{{lid.short_intro}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock content%}

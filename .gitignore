@@ -1,6 +1,5 @@
 environment/
 .vscode/
-templates/
 django-google*
 gitlab*
 db*

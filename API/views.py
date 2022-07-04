@@ -256,7 +256,9 @@ def getDeclas(request):
             receipt=data["receipt"] or None,
             reunist=data["reunist"] or 0,
             kmters=data["kmters"] or 0,
-            verwerkt=data["verwerkt"] or False,
+            verwerkt=True
+                if data["verwerkt"] == "true" and "verwerkt" in data.keys()
+                else False,
             boekstuk=Boekstuk.objects.get(id=data["boekstuk"]),
         )
         if "present" in data.keys():
@@ -282,7 +284,6 @@ def getDecla(request, decla_id):
 
             data = request.data
             # print(data)
-
             if "event" in data.keys():
                 decla.event = (
                     Event.objects.get(id=data["event"]["id"])
@@ -310,7 +311,6 @@ def getDecla(request, decla_id):
                 if data["verwerkt"] == "true" and "verwerkt" in data.keys()
                 else False
             )
-            # print("receipt")
             if "receipt" in data.keys():
                 decla.receipt = data["receipt"] or decla.receipt
             if "boekstuk" in data.keys():
