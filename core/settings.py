@@ -44,6 +44,9 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "stropdas.herokuapp.com",
     "stropdas2.herokuapp.com",
+    "stropdas3.herokuapp.com",
+    "stropdas4.herokuapp.com",
+    "stropdas5.herokuapp.com",
 ]
 
 # Application definition
