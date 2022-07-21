@@ -95,23 +95,26 @@ def getLeden(request):
     return Response(serializer.data)
 
 
-@api_view(["GET"])
+@api_view(["GET", 'PUT'])
 @permission_classes([IsAuthenticated])  # , "POST"
 def getLid(request, pk):
     lid = Lid.objects.get(id=pk)
-    serializer = LidSerializer(lid, many=False)
-    # data = request.data
-    # lid_edit = lid.update(
-    # initials=data['initials'],
-    # name=data['name'],
-    # birth_date=data['birth_date'],
-    # educations=data['educations'],
-    # lichting=data['lichting'],
-    # vertical=data['vertical'],
-    # email=data['email'],
-    # phone=data['phone'],
-    # short_intro= data['short_intro'],
-    # )
+    data = request.data
+    if request.method == "PUT":    
+         lid.initials = data['initials'] if 'initials' in data.keys() else lid.initials
+         lid.name = data['name'] if 'name' in data.keys() else lid.name
+         lid.birth_date = data['birthDate'] if 'birthDate' in data.keys() else lid.birth_date
+         lid.educations = data['educations'] if 'educations' in data.keys() else lid.educations
+         lid.lichting = data['lichting'] if 'lichting' in data.keys() else lid.lichting
+         lid.vertical = data['vertical'] if 'vertical' in data.keys() else lid.vertical
+         lid.email = data['email'] if 'email' in data.keys() else lid.email
+         lid.phone = data['phone'] if 'phone' in data.keys() else lid.phone
+         lid.active = True if data["active"] == "true" and "active" in data.keys() else False
+         lid.short_intro =  data['shortIntro'] if 'shortIntro' in data.keys() else lid.short_intro
+         if "lidImage" in data.keys():
+                lid.lid_image = data["lidImage"] or lid.lid_image
+         lid.save()
+    serializer = LidSerializer(lid,many=False)
     return Response(serializer.data)
 
 
