@@ -1,6 +1,6 @@
 from agenda.models import AgendaClient, Event, NIEvent
 from documents.models import Document
-from finance.models import Boekstuk, Decla
+from finance.models import Boekstuk, Decla, Stand
 from rest_framework import serializers
 from users.models import Lid
 
@@ -11,7 +11,19 @@ class AgendaClientSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class StandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stand
+        fields = "__all__"
+
+
 class LidSerializer(serializers.ModelSerializer):
+
+    stand = serializers.SerializerMethodField()
+    def get_stand(self, lid):
+        stand_set = StandSerializer(Stand.objects.get(owner_id=lid.id), many=False)
+        return stand_set.data
+
     class Meta:
         model = Lid
         fields = "__all__"
@@ -29,6 +41,8 @@ class DeclaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Decla
         fields = "__all__"
+
+
 class BoekstukSerializer(serializers.ModelSerializer):
     class Meta:
         model = Boekstuk
